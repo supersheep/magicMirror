@@ -57,7 +57,7 @@ body{background-image:url('i/bg-main.png');}
     color: #fff;
     font-weight: bold;
     display: inline-block;
-    width: 64px;
+    width: 75px;
     text-shadow: 0 1px 0 black;
 }
 .monitor .bface .setting-field{

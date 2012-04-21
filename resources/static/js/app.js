@@ -1,7 +1,6 @@
 
 // TODO:
 // 1. Listen mousemove and show/hide elems
-console.log("haha");
 
 YUI(GLOBAL_CONFIG).use('node','event','desktop','dd-drag', 'dd-drop' , 'dd-proxy', 'dd-constrain','monitor',function(Y) {
 	

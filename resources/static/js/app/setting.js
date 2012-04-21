@@ -19,7 +19,12 @@ YUI.add('setting',function(Y){
 		'xkey':'x轴字段',
 		'ykeys':'y轴字段',
 		'names':'视图名称',
+		'start':'起始时间',
+		'freq':'刷新频率',
 		'step':'刻度'
+	};
+	var unitMap = {
+		'freq':'秒'
 	};
 	var renderMap = {
 		'xkey':function(){
@@ -34,12 +39,15 @@ YUI.add('setting',function(Y){
 		'start':function(){
 			return Y.Node.create('<input />');
 		},
+		/*'freq':function(){
+			return Y.Node.create('<input placeholder="单位秒" />').setStyle('width',50);
+		},*/
 		'step':function(){
 			var select = Y.Node.create('<select />');
 			steps.forEach(function(e){
 				var option = Y.Node.create('<option />');
-				option.set('value',valueTextMap[e]);
-				option.set('innerHTML',e);
+				option.set('value',e);
+				option.set('innerHTML',valueTextMap[e]);
 				option.appendTo(select);
 			});
 			return select;
@@ -58,7 +66,7 @@ YUI.add('setting',function(Y){
 			renderUI:function(container){
 				var self = this;
 				var	complete = self.complete = Y.Node.create('<input type="button" value="好" class="ok" />');
-				var row,name,field;
+				var row,name,field,unit;
 				
 				self.container = container;
 				
@@ -66,26 +74,36 @@ YUI.add('setting',function(Y){
 				for(var key in self.setting){
 					row = Y.Node.create('<div />').addClass(CLS_ROW);
 					name = Y.Node.create('<span />').addClass(CLS_NAME).set('innerHTML',valueTextMap[key] + ':');
-					field = self.controlMap[key] =  renderMap[key]().addClass(CLS_FIELD);
-					row.append(name);
-					row.append(field);
-					container.append(row);
+					field = self.controlMap[key] =  renderMap[key] && renderMap[key]().addClass(CLS_FIELD).set('value',self.setting[key]);
+				//	unit = Y.Node.create('<span />').set('innerHTML',unitMap[key]||'');
+					if(name && field && row){
+						row.append(name);
+						row.append(field);
+				//		row.append(unit);
+						container.append(row);
+					}
 				}
+				container.append(complete);
 				self.bindUI();
 			},
 			bindUI:function(){
 				var self = this;
-				complete.on('click',function(){
+				self.complete.on('click',function(){
 					// serialize setting to config
-					self._setback(key,val);
-					self.fire('complete');
+					self._setback();
+					self.fire('complete',self.setting);
 				});
 			},
 			_setback:function(){
+				var self = this;
 				var controlMap = self.controlMap;
 				var valueMap = self.valueMap;
 				for(var key in controlMap){
-					valueMap[key] = controlMap[key].get('value');
+					if(controlMap[key]){ 
+						valueMap[key] = controlMap[key].get('value');
+					}else{
+						// valueMap[key] = null 
+					}
 				}
 				self.setting = valueMap;
 			}

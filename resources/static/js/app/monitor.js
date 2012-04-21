@@ -80,12 +80,12 @@ YUI.add('monitor',function(Y){
 		});
 
 		resize.on('resize:end',function(e){
-			console.log('resize end');
 			var w = e.info.offsetWidth,
 				h = e.info.offsetHeight;
 			self.config.size = [w,h];
 			self.render();
 			desktop.sync();
+			console.log("resize end");
 		});
 		
 		
@@ -97,7 +97,6 @@ YUI.add('monitor',function(Y){
 		drag.on('drag:end', function(e) {
 			self.config.xy = e.target.lastXY;
 			self.update();
-			console.log(e.target);
 			desktop.sync();
 		});	
 		
@@ -149,7 +148,8 @@ YUI.add('monitor',function(Y){
 			settingPannel = new Y.Setting(setting);
 			
 			settingPannel.renderUI(binner);
-			settingPannel.on('complete',function(){
+			settingPannel.on('complete',function(setting){
+				self.config.setting = setting;
 				self.desktop.sync();
 				card.removeClass('set');
 				self.isSetting = false;
@@ -163,13 +163,11 @@ YUI.add('monitor',function(Y){
 	   		}
 	    },
 		render:function(data){	
+			//return false;
 			var self = this;
 			var chart = self.config.chart;
 			data = self.data = data || self.data;			
-			
-			Flotr.draw(self.inner.getDOMNode(), Y.Array(data), chart);
-			
-			
+			data && Flotr.draw(self.inner.getDOMNode(), Y.Array(data), chart);
 		},
 		destroy:function(){
 			this.desktop.remove(this);
@@ -188,14 +186,18 @@ YUI.add('monitor',function(Y){
 		 *  @param config	{Object}
 		**/
 		produce:function (type,axis,desktop,config){
-			var mod = monitors[type];
-				
+			var mod = monitors[type],
+				realconfig;
 			
 			if(!mod){
 				throw "module "+type+" not defined";
 			}
 			
-			var realconfig = Y.merge( Y.clone(mod.config)||{} , config||{} );
+			realconfig = Y.clone(config);
+			
+			realconfig = Y.merge(mod.config,realconfig);
+			realconfig.setting = Y.mix(realconfig.setting,mod.config.setting||{});
+	
 			new MonitorPannel(
 				desktop,
 				mod.fetcher,
@@ -218,8 +220,9 @@ YUI.add('monitor',function(Y){
 	function modSuccess(id, o, self) {
         // var id = id; // Transaction ID.
         var setting = self.config.setting;
-        var json = JSON.parse(JSON.parse(o.responseText).data); // Response data.
-        var data = [];
+        // var json = JSON.parse(JSON.parse(o.responseText).data); // Response data.
+        var json = JSON.parse(o.responseText).data;
+		var data = [];
         
 		var names = setting.names.split(',');
 		var xkey = setting.xkey;
@@ -228,11 +231,14 @@ YUI.add('monitor',function(Y){
 		
         json.forEach(function(dt,i){
         	var d = dt.map(function(obj){
+			
+			var erroritem;
         	if( (obj[xkey]==null||obj[ykeys[i]]==null) && !self.isSetting){
-        		
+
+        		erroritem = obj[xkey]?"xkey":("ykeys"+i);
         		console.log(self.isSetting);
         		self.setting();
-        		alert('字段配置错误');
+        		alert(erroritem + '字段配置错误');
         	}
         		return [
         			new Date(obj[xkey]),
@@ -250,8 +256,8 @@ YUI.add('monitor',function(Y){
 	    var chart = self.config.chart;
 		var setting = self.config.setting;
 		
-		self.uri = '/board/ajax/viewDataAction';
-		
+		// self.uri = '/board/ajax/viewDataAction';
+		self.uri = '/ajax/view.php';
 		YUI().use('io', function (Y) {
 			
 		    Y.on('io:success', modSuccess,Y,self);
@@ -268,21 +274,17 @@ YUI.add('monitor',function(Y){
 	addMod("line",fetcher,{
 		"size":[300,300],
 		"chart":{
-			"yaxis":{
-				"min":null,
-				"max":null
-			},
 			"xaxis":{
 				"mode":"time"
 			},
 			"noTicks":5		
 		},
 		"setting":{
-			"xkey":"",
-			"ykeys":"",
-			"names":"",
+			"xkey":"time",
+			"ykeys":"cn,cn",
+			"names":"a,b",
 			"start":"",
-			"end":"",
+			"freq":"5",
 			"step":"year"
 		}
 	});
@@ -290,9 +292,8 @@ YUI.add('monitor',function(Y){
 	addMod("bar",fetcher,{
 		"size":[320,350],
 		"chart":{
-			"yaxis":{
-				"min":-3,
-				"max":3
+			"xaxis":{
+				"mode":"time"
 			},
 			"bars" : {
 		        show : true,
@@ -305,7 +306,6 @@ YUI.add('monitor',function(Y){
 			"ykeys":"",
 			"names":"",
 			"start":"",
-			"end":"",
 			"step":"year"
 		}
 	});
