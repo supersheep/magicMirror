@@ -98,7 +98,7 @@ box-shadow: 1px 1px 1px rgba(0,0,0,0.3);
 .monitor .yui3-resize-handle-t,
 .monitor .yui3-resize-handle-l,
 .monitor .yui3-resize-handle-r{
-	display:none;
+/*	display:none;*/
 }
 
 .yui3-skin-sam{}

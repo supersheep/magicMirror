@@ -64,11 +64,10 @@ YUI.add('monitor',function(Y){
 	        //Selector of the node to resize
 	        node: this.elem
 	    });   
-		
+	
 		resize.on('resize:resize',function(e){
-			var w = e.info.offsetWidth - 20,
+			var w = e.info.offsetWidth - 20;	
 				h = e.info.offsetHeight - 30;
-			
 			self.inner.setStyles({
 				'width':w,
 				'height':h
@@ -83,10 +82,11 @@ YUI.add('monitor',function(Y){
 			var w = e.info.offsetWidth,
 				h = e.info.offsetHeight;
 			self.config.size = [w,h];
+
 			self.render();
 			desktop.sync();
 			console.log("resize end");
-		});
+		});	
 		
 		
 		
@@ -166,8 +166,8 @@ YUI.add('monitor',function(Y){
 			//return false;
 			var self = this;
 			var chart = self.config.chart;
-			data = self.data = data || self.data;			
-			data && Flotr.draw(self.inner.getDOMNode(), Y.Array(data), chart);
+			data = self.data = data || self.data || [];			
+			Flotr.draw(self.inner.getDOMNode(), data,chart);
 		},
 		destroy:function(){
 			this.desktop.remove(this);
@@ -313,3 +313,4 @@ YUI.add('monitor',function(Y){
 	
 	Y.Monitor = Monitor;
 });
+
