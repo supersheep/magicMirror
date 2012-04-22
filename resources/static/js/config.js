@@ -11,15 +11,22 @@ var GLOBAL_CONFIG = {
 			fullpath:'/resources/static/js/app/setting.js',
 			requires:['node','event-custom','timepicker']
 		},
-		'monitor':{			
-			fullpath:'/resources/static/js/app/monitor.js',
+		'monitorPannel':{			
+			fullpath:'/resources/static/js/app/monitorPannel.js',
 			requires:['node','dd-drag','resize','event-custom','io','setting']
 		},
+		'monitorFactory':{
+			fullpath:'/resources/static/js/app/monitorFactory.js',
+			requires:['monitorPannel']
+		},
 		'desktop':{
-			fullpath:'/resources/static/js/app/desktop.js',                   
-			requires:['node','event-custom','monitor']
+			fullpath:'/resources/static/js/app/desktop.js',
+			requires:['node','event-custom','monitorFactory'],
+		},
+		'desktopManager':{
+			fullpath:'/resources/static/js/app/desktopManager.js',                   
+			requires:['desktop']
 		}
-		
 	} /*,                            
 	groups:{			//设定加载一组YUI开发包之外的模块集合，
 		'groupName':{

@@ -2,7 +2,7 @@
 // TODO:
 // 1. Listen mousemove and show/hide elems
 
-YUI(GLOBAL_CONFIG).use('node','event','desktop','dd-drag', 'dd-drop' , 'dd-proxy', 'dd-constrain','monitor',function(Y) {
+YUI(GLOBAL_CONFIG).use('desktopManager','monitorFactory','dd-drag','dd-drop','dd-proxy',function(Y) {
 	
 	var body = Y.one('body'),
 		wrap = body.one('.wrap'),
@@ -34,7 +34,7 @@ YUI(GLOBAL_CONFIG).use('node','event','desktop','dd-drag', 'dd-drop' , 'dd-proxy
 		 * Item Drag to The Board
 		 *
 		 **/
-			
+		Y.use('')	
 			// init drag instances
 			items.each(function(e,i){
 				var drag= new Y.DD.Drag({
@@ -90,7 +90,7 @@ YUI(GLOBAL_CONFIG).use('node','event','desktop','dd-drag', 'dd-drop' , 'dd-proxy
 						title = node.getAttribute('data-title');
 						
 					// add a monitor to a desktop
-					Y.Monitor.produce(type,xy,desktop.getCurrent(),{
+					Y.MonitorFactory.produce(type,xy,desktop.getCurrent(),{
 						setting:{
 							"xkey":xkey,
 							"ykeys":ykeys,
@@ -148,7 +148,7 @@ YUI(GLOBAL_CONFIG).use('node','event','desktop','dd-drag', 'dd-drop' , 'dd-proxy
 	Y.on('domready',function(){
 		var initdata = JSON.parse(localStorage.getItem("desktops"));
 		console.log('initdata',localStorage.getItem("desktops"),initdata);
-		desktop = new Y.Desktop(main,initdata);
+		desktop = new Y.DesktopManager(main,initdata);
 		render();
 		bindEvents();
 	});
