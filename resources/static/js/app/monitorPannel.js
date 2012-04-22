@@ -12,7 +12,7 @@
 **/
 
 YUI.add('monitorPannel',function(Y){
-	
+	console.log('monitorPannel',Y._yuid);
 	
 	// should have event to rerender
 
@@ -84,12 +84,16 @@ YUI.add('monitorPannel',function(Y){
 	    renderUI:function(){
 			function div(cls){return Y.Node.create('<div />').addClass(cls);}
 			
+			
+			
+			
 	    	var self = this,
 	    		desktop = this.desktop,
 	    		xy = this.config.xy,
 	    		size = this.config.size,
 	    		container = desktop.elem,
 	    		wh = {width:size[0],height:size[1]},
+	    		whinner = {width:size[0]-20,height:size[1]-30},
 	    		lt = {left:xy[0],top:xy[1]};
 	    	
 			var fface = div('fface'),
@@ -98,9 +102,9 @@ YUI.add('monitorPannel',function(Y){
 				
 			
 	    	this.chart = div('chart');
-			this.chartinner = div('chart-inner').setStyles(wh);
-			this.elem = div('monitor').setStyles(lt);
-			this.binner = div('binner').setStyles(wh);
+			this.chartinner = div('chart-inner').setStyles(whinner);
+			this.elem = div('monitor').setStyles(lt).setStyles(wh);
+			this.binner = div('binner').setStyles(whinner);
 			
 			this.card = div('card');
 			
@@ -117,16 +121,20 @@ YUI.add('monitorPannel',function(Y){
 			chart = this.chart;
 			setting = this.setting;
 			
+			
 			close.appendTo(elem);
-			binner.appendTo(bface);
+			
+			card.appendTo(elem);
 			bface.appendTo(card);
 			fface.appendTo(card);
 			
 			setting.appendTo(fface);
 			chart.appendTo(fface);
+			
+			binner.appendTo(bface);
 			chartinner.appendTo(chart);
 			
-			card.appendTo(elem);
+			
 			elem.appendTo(container);
 	    },
 	    bindUI:function(){
@@ -135,38 +143,39 @@ YUI.add('monitorPannel',function(Y){
 	    		desktop = this.desktop,
 	    		close = this.close,
 	    		setting = this.setting,
-	    		resize;
+	    		resize,drag;
 	    		
-	    	resize = new Y.Resize({
-		        //Selector of the node to resize
-		        node: this.elem
-		    });   
+	    	YUI().use('resize',function(Y){
+			
+				var resize =new Y.Resize({
+			        //Selector of the node to resize
+			        node: self.elem
+			    });   
+	    	
+				resize.on('resize:resize',function(e){
+					var w = e.info.offsetWidth - 20;	
+						h = e.info.offsetHeight - 30;
+					self.chartinner.setStyles({
+						'width':w,
+						'height':h
+					});
+					
+					self.binner.setStyles({
+						'width':w,
+						'height':h
+					});
+				});
 		
-			resize.on('resize:resize',function(e){
-				var w = e.info.offsetWidth - 20;	
-					h = e.info.offsetHeight - 30;
-				self.chartinner.setStyles({
-					'width':w,
-					'height':h
-				});
-				
-				self.binner.setStyles({
-					'width':w,
-					'height':h
-				});
+				resize.on('resize:end',function(e){
+					var w = e.info.offsetWidth,
+						h = e.info.offsetHeight;
+					self.config.size = [w,h];
+		
+					self.syncUI();
+					desktop.sync();
+					console.log("resize end");
+				});	
 			});
-	
-			resize.on('resize:end',function(e){
-				var w = e.info.offsetWidth,
-					h = e.info.offsetHeight;
-				self.config.size = [w,h];
-	
-				self.syncUI();
-				desktop.sync();
-				console.log("resize end");
-			});	
-			
-			
 			
 			drag = new Y.DD.Drag({
 				node: this.elem
@@ -183,6 +192,7 @@ YUI.add('monitorPannel',function(Y){
 			this.on('data',function(data){
 				self.syncUI(data);
 			});
+			
 	    },
 		syncUI:function(data){	
 			//return false;
