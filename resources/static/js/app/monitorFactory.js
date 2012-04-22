@@ -20,12 +20,10 @@ YUI.add('monitorFactory',function(Y){
 			realconfig = Y.merge(mod.config,realconfig);
 			realconfig.setting = Y.mix(realconfig.setting,mod.config.setting||{});
 	
-			new Y.MonitorPannel(
-				desktop,
-				mod.fetcher,
+			new Y.MonitorPannel(mod.fetcher,
 				axis,
 				realconfig
-			);	
+			).addTo(desktop);	
 		},
 		add:function(type,fetcher,config){
 			monitors[type] = {
