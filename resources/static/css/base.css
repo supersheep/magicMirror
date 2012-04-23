@@ -48,7 +48,7 @@ body{background-image:url('i/bg-main.png');}
 .monitor .fface{-webkit-transform:rotateY(0deg);background:#fff;border-radius:5px;overflow:hidden;-webkit-backface-visibility: hidden;-webkit-transition:all .5s;box-shadow: 3px 3px 6px rgba(0,0,0,0.6);}
 .monitor .bface{-webkit-transform: rotateY(180deg);background: #fff url('i/cloth.png');border-radius: 5px;top:0;position:absolute;-webkit-backface-visibility: hidden;-webkit-transition:all .5s;box-shadow: 3px 3px 6px rgba(0,0,0,0.6);}
 .monitor .fface .chart-inner{margin:15px 10px 15px 5px;}
-.monitor .bface .binner{margin:15px 0 15px 15px;}
+.monitor .bface .binner{margin:15px 0 15px 20px;}
 
 .monitor .bface .setting-row{
     margin-bottom: 10px;
@@ -98,7 +98,7 @@ box-shadow: 1px 1px 1px rgba(0,0,0,0.3);
 .monitor .yui3-resize-handle-t,
 .monitor .yui3-resize-handle-l,
 .monitor .yui3-resize-handle-r{
-/*	display:none;*/
+	display:none;
 }
 
 .yui3-skin-sam{}

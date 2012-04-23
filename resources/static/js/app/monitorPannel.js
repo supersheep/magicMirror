@@ -109,7 +109,7 @@ YUI.add('monitorPannel',function(Y){
 			this.card = div('card');
 			
 			this.close = div('close');
-			this.setting =  div('setting');
+			this.setbtn =  div('setting');
 			
 			fface = div('fface');
 			bface = div('bface');
@@ -119,7 +119,7 @@ YUI.add('monitorPannel',function(Y){
 			chartinner = this.chartinner;
 			binner = this.binner;
 			chart = this.chart;
-			setting = this.setting;
+			setbtn = this.setbtn;
 			
 			
 			close.appendTo(elem);
@@ -128,7 +128,7 @@ YUI.add('monitorPannel',function(Y){
 			bface.appendTo(card);
 			fface.appendTo(card);
 			
-			setting.appendTo(fface);
+			setbtn.appendTo(fface);
 			chart.appendTo(fface);
 			
 			binner.appendTo(bface);
@@ -142,7 +142,7 @@ YUI.add('monitorPannel',function(Y){
 	    	var self = this,
 	    		desktop = this.desktop,
 	    		close = this.close,
-	    		setting = this.setting,
+	    		setbtn = this.setbtn,
 	    		resize,drag;
 	    		
 	    	YUI().use('resize',function(Y){
@@ -188,7 +188,7 @@ YUI.add('monitorPannel',function(Y){
 			});	
 			
 			this.close.on('click',Y.bind(this.destroy,this));
-			this.setting.on('click',Y.bind(this.setting,this));
+			this.setbtn.on('click',Y.bind(this.setting,this));
 			this.on('data',function(data){
 				self.syncUI(data);
 			});
