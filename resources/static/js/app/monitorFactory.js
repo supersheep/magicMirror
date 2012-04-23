@@ -37,55 +37,18 @@ YUI.add('monitorFactory',function(Y){
 	
 	// functions for addMod
 	
-	function modSuccess(id, o, self) {
-        // var id = id; // Transaction ID.
-        var setting = self.config.setting;
-        // var json = JSON.parse(JSON.parse(o.responseText).data); // Response data.
-        var json = JSON.parse(o.responseText).data;
-		var data = [];
-        
-		var names = setting.names.split(',');
-		var xkey = setting.xkey;
-		var ykeys = setting.ykeys.split(',');
-        
-		
-        json.forEach(function(dt,i){
-        	var d = dt.map(function(obj){
-			
-			var erroritem;
-        	if( (obj[xkey]==null||obj[ykeys[i]]==null) && !self.isSetting){
-
-        		erroritem = obj[xkey]?"xkey":("ykeys"+i);
-        		console.log(self.isSetting);
-        		self.setting();
-        		alert(erroritem + '字段配置错误');
-        	}
-        		return [
-        			new Date(obj[xkey]),
-        			obj[ykeys[i]]
-        		];
-        	})
-        	data.push({data:d,label:names[i]});
-        });
-		self.fire('data',data);
-    };
-	
 	function fetcher(){
 	    // Define a function to handle the response data.
-	    var self = this;
-	    var chart = self.config.chart;
-		var setting = self.config.setting;
+	    var pannel = this;
+	    var chart = pannel.config.chart;
+		var setting = pannel.config.setting;
 		
-		// self.uri = '/board/ajax/viewDataAction';
-		self.uri = '/ajax/view.php';
-		YUI().use('io', function (Y) {
-			
-		    Y.on('io:success', modSuccess,Y,self);
-	    	self.fetch(Y);
-			self.clock = setInterval(function(){
-		   		self.fetch(Y);
-			},15000);
-		});
+		// pannel.uri = '/board/ajax/viewDataAction';
+		pannel.uri = '/ajax/view.php';
+		pannel.clock = setInterval(function(){
+	   		pannel.fetch();
+		},pannel.config.setting.interval || 5000);
+		pannel.fetch();
     }
 	
 	
@@ -93,39 +56,27 @@ YUI.add('monitorFactory',function(Y){
 	// two test modules
 	addMod("line",fetcher,{
 		"size":[300,300],
-		"chart":{
-			"xaxis":{
-				"mode":"time"
-			},
-			"noTicks":5,
-		},
-		"setting":{
-			"xkey":"time",
-			"ykeys":"cn,cn",
-			"names":"a,b",
-			"start":"",
-			"freq":"5",
-			"step":"year"
-		}
-	});
-	
-	addMod("bar",fetcher,{
-		"size":[320,350],
-		"chart":{
-			"xaxis":{
-				"mode":"time"
-			},
-			"bars" : {
-		        show : true,
-		        shadowSize : 0,
-		        barWidth : 0.5
-		    }
-		},
+		"chart":{},
 		"setting":{
 			"xkey":"",
 			"ykeys":"",
 			"names":"",
 			"start":"",
+			"end":"",
+			"type":"line",
+			"freq":"5"
+		}
+	});
+	
+	addMod("bar",fetcher,{
+		"size":[320,350],
+		"chart":{},
+		"setting":{
+			"xkey":"",
+			"ykeys":"",
+			"names":"",
+			"start":"",
+			"end":"",
 			"step":"year"
 		}
 	});

@@ -13,6 +13,59 @@
 
 YUI.add('monitorPannel',function(Y){
 	console.log('monitorPannel',Y._yuid);
+	var CHART_TYPES = {
+			"bar":{"bars" : {
+        		show : true,
+        		shadowSize : 0,
+        		barWidth : 0.5
+    		}},
+			"line":{
+    			"bars":null
+    		},
+			"pie":{
+    			"bars":null
+    		}
+	};
+	
+	
+	function modSuccess(id, o, self) {
+        // var id = id; // Transaction ID.
+        var setting = self.config.setting;
+        //var json = JSON.parse(JSON.parse(o.responseText).data); // Response data.
+        var json = JSON.parse(o.responseText).data;
+		var data = [];
+        
+		var names = setting.names.split(',');
+		var xkey = setting.xkey;
+		var ykeys = setting.ykeys.split(',');
+        
+        json.forEach(function(dt,i){
+        	
+        	dt = dt.sort(function(a,b){
+        		return a[xkey] - b[xkey];
+        	});
+        	        	
+        	var d = dt.map(function(obj){
+			
+			var erroritem;
+        	if( (obj[xkey]==null||obj[ykeys[i]]==null) && !self.isSetting){
+
+        		erroritem = !obj[xkey]?"xkey":("ykeys"+i);
+        		console.log(self.isSetting);
+        		self.setting();
+        		alert(erroritem + '字段配置错误');
+        	}
+        		return [
+        			obj[xkey],
+        			obj[ykeys[i]]
+        		];
+        	});
+        	data.push({data:d,label:names[i]});
+        });
+        
+		self.fire('data',data);
+    };
+	
 	
 	// should have event to rerender
 
@@ -70,15 +123,36 @@ YUI.add('monitorPannel',function(Y){
 			settingPannel.on('complete',function(setting){
 				self.config.setting = setting;
 				self.desktop.sync();
+				self.fetch();
 				card.removeClass('set');
 				self.isSetting = false;
 			});
 		},
-		fetch:function(Y){
+		fetch:function(){
 			var self = this,
 				uri = self.uri;
+			
+			var params = {
+				"viewName":"names",
+				"fromDate":"start",
+				"toDate":"end",
+				"xField":"xkey"
+			}
+			
+			function querystr(params){
+				var ret = [];
+				for(var key in params){
+					ret.push(key + "=" + self.config.setting[params[key]]||'');
+				}
+				return "?" + ret.join("&");
+			}
+			
 			if( self.desktop.desktops.current == self.desktop.index){
-	   			Y.io(uri + '?viewName=' + self.config.setting.names);
+				YUI().use('io', function (Y) {
+					var query = querystr(params);
+				    Y.on('io:success', modSuccess,Y,self);
+	   				Y.io(uri + query );
+				});
 	   		}
 	    },
 	    renderUI:function(){
@@ -198,7 +272,17 @@ YUI.add('monitorPannel',function(Y){
 			//return false;
 			var self = this;
 			var chart = self.config.chart;
-			data = self.data = data || self.data || [];			
+			data = self.data = data || self.data || [];	
+
+			chart = CHART_TYPES[self.config.setting.type];
+			if(self.config.setting.xkey == "time"){
+				chart = Y.merge(chart,{xaxis:{
+					"mode":"time",
+					"timeMode":"local"
+				}});
+			};
+			
+			console.log(chart);
 			Flotr.draw(self.chartinner.getDOMNode(), data,chart);
 		},
 		destroy:function(){

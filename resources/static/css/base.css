@@ -66,16 +66,22 @@ body{background-image:url('i/bg-main.png');}
     border: 0;
 }
 
+.monitor .bface .setting-unit{
+	color: #fff;
+    text-shadow: 0 1px 0 black;
+	margin-left:5px;
+}
+
 .monitor .bface .ok{
-border-radius: 10px;
-border: 0;
-background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, .75)), to(rgba(255, 255, 255, 0)));
-background-color: #444;
-color: #EEE;
-width: 40px;
-padding: 3px 0;
-text-shadow: -1px -1px 0 rgba(0, 0, 0, .3);
-box-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	border: 0;
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, .75)), to(rgba(255, 255, 255, 0)));
+	background-color: #444;
+	color: #EEE;
+	width: 40px;
+	padding: 3px 0;
+	text-shadow: -1px -1px 0 rgba(0, 0, 0, .3);
+	box-shadow: 1px 1px 1px rgba(0,0,0,0.3);
 }
 
 .monitor .close{position:absolute;width:34px;height:34px;color:#eff;left:-17px;top:-17px;background-image:url('i/remove.png');display:none;z-index:5;}

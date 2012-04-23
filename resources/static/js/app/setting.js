@@ -9,7 +9,9 @@ YUI.add('setting',function(Y){
 	var CLS_ROW = 'setting-row';
 	var CLS_NAME = 'setting-name';
 	var CLS_FIELD = 'setting-field';
+	var CLS_UNIT = 'setting-unit';
 	var steps = ['year','month','day','hour','minute'];
+	var types = ['bar','line','pie'];
 	var valueTextMap = {
 		'year':'年',
 		'month':'月',
@@ -20,9 +22,33 @@ YUI.add('setting',function(Y){
 		'ykeys':'y轴字段',
 		'names':'视图名称',
 		'start':'起始时间',
+		'end':'结束时间',
 		'freq':'刷新频率',
-		'step':'刻度'
+		'type':'图表类型',
+		'active':'实时',
+		'bar':'柱状图',
+		'line':'线图',
+		'pie':'饼图'
 	};
+	
+	var valueConverter = {
+		'datetime':{
+			view:function(data){
+				var str = "",day;
+				if(!data){
+					return '';
+				}else{
+					day = data ? new Date(data) : '';
+					return day.getFullYear() + "-" + (day.getMonth()+1) + "-" + day.getDate() + " " + day.getHours() + ":" + day.getMinutes();
+				}
+			},
+			data:function(view){
+				return view ? +new Date(view) : '';
+			}
+		}
+			
+	}
+	
 	var unitMap = {
 		'freq':'秒'
 	};
@@ -37,11 +63,28 @@ YUI.add('setting',function(Y){
 			return Y.Node.create('<input />');
 		},
 		'start':function(){
-			return Y.Node.create('<input />');
+			return Y.Node.create('<input />').set('type','datetime');
 		},
-		/*'freq':function(){
+		'end':function(){
+			return Y.Node.create('<input />').set('type','datetime');
+		},
+		'freq':function(){
 			return Y.Node.create('<input placeholder="单位秒" />').setStyle('width',50);
-		},*/
+		},
+		'type':function(){
+			var select = Y.Node.create('<select />');
+			types.forEach(function(e){
+				var option = Y.Node.create('<option />');
+				option.set('value',e);
+				option.set('innerHTML',valueTextMap[e]);
+				option.appendTo(select);
+			});
+			return select;
+		},
+		'active':function(){
+			return Y.Node.create('<input type="checkbox" />');
+		}
+		/*
 		'step':function(){
 			var select = Y.Node.create('<select />');
 			steps.forEach(function(e){
@@ -51,8 +94,28 @@ YUI.add('setting',function(Y){
 				option.appendTo(select);
 			});
 			return select;
-		}
+		}*/
 	};
+	
+	function setFieldValue(field,value){
+		
+		var type = field.getAttribute('type');
+		
+		if(valueConverter[type]){
+			value = valueConverter[type]['view'](value);
+		}
+		
+		field.setAttribute('value',value);
+	}
+	
+	function getFieldValue(field){
+		var type = field.getAttribute('type');
+		var value = field.get('value');
+		if(valueConverter[type]){
+			value = valueConverter[type]['data'](value);
+		}
+		return value;
+	}
 	
 	var Setting = function(setting){
 		var self = this;
@@ -74,12 +137,13 @@ YUI.add('setting',function(Y){
 				for(var key in self.setting){
 					row = Y.Node.create('<div />').addClass(CLS_ROW);
 					name = Y.Node.create('<span />').addClass(CLS_NAME).set('innerHTML',valueTextMap[key] + ':');
-					field = self.controlMap[key] =  renderMap[key] && renderMap[key]().addClass(CLS_FIELD).set('value',self.setting[key]);
-				//	unit = Y.Node.create('<span />').set('innerHTML',unitMap[key]||'');
+					field = self.controlMap[key] =  renderMap[key] && renderMap[key]().addClass(CLS_FIELD);
+					unit = Y.Node.create('<span />').addClass(CLS_UNIT).set('innerHTML',unitMap[key]||'');
+					setFieldValue(field,self.setting[key]);
 					if(name && field && row){
 						row.append(name);
 						row.append(field);
-				//		row.append(unit);
+						row.append(unit);
 						container.append(row);
 					}
 				}
@@ -98,9 +162,11 @@ YUI.add('setting',function(Y){
 				var self = this;
 				var controlMap = self.controlMap;
 				var valueMap = self.valueMap;
+				var control;
 				for(var key in controlMap){
 					if(controlMap[key]){ 
-						valueMap[key] = controlMap[key].get('value');
+						control = controlMap[key];
+						valueMap[key] = getFieldValue(control);						
 					}else{
 						// valueMap[key] = null 
 					}
