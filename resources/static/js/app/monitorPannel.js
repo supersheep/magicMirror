@@ -31,8 +31,7 @@ YUI.add('monitorPannel',function(Y){
 	function modSuccess(id, o, self) {
         // var id = id; // Transaction ID.
         var setting = self.config.setting;
-        //var json = JSON.parse(JSON.parse(o.responseText).data); // Response data.
-        var json = JSON.parse(o.responseText).data;
+        var json = APP_CONFIG['dataParser'](o.responseText);
 		var data = [];
         
 		var names = setting.names.split(',');
@@ -275,7 +274,7 @@ YUI.add('monitorPannel',function(Y){
 			data = self.data = data || self.data || [];	
 
 			chart = CHART_TYPES[self.config.setting.type];
-			if(self.config.setting.xkey == "time"){
+			if(self.config.setting.xkey == APP_CONFIG["timefield"]){
 				chart = Y.merge(chart,{xaxis:{
 					"mode":"time",
 					"timeMode":"local"

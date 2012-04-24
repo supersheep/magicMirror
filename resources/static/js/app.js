@@ -2,7 +2,7 @@
 // TODO:
 // 1. Listen mousemove and show/hide elems
 
-YUI(GLOBAL_CONFIG).use('desktopManager','monitorFactory','dd-drag','dd-drop','dd-proxy',function(Y) {
+YUI(YUI_CONFIG).use('desktopManager','monitorFactory','widgetManager','dd-drag','dd-drop','dd-proxy',function(Y) {
 	
 	var body = Y.one('body'),
 		wrap = body.one('.wrap'),
@@ -10,8 +10,11 @@ YUI(GLOBAL_CONFIG).use('desktopManager','monitorFactory','dd-drag','dd-drop','dd
 		main = body.one('.main'),
 		toolbox = wrap.one('.toolbox'),
 		toggle = toolbox.one('.toggle'),
+		manage = toolbox.one('.manage'),
 		items = toolbox.all('.item'),
+		toggled = false,
 		mousefield,
+		widgetManager,
 		desktop;
 	
 	function render(){
@@ -24,16 +27,28 @@ YUI(GLOBAL_CONFIG).use('desktopManager','monitorFactory','dd-drag','dd-drop','dd
 		/**
 		 * Toggle The Pannel
 		 *
-		 **/	
+		**/	
 		toggle.on('click',function(){
 			main.toggleClass('active');
 			toolbox.toggleClass('active');
+			toggled = !toggled;
+		});
+		
+		/**
+		 * Manage Widgets
+		 *
+		**/
+		manage.on('click',function(){
+			//Y.WidgetManagePannel.show();
+			if(toggled){
+				widgetManager.show();
+			}
 		});
 		
 		/**
 		 * Item Drag to The Board
 		 *
-		 **/
+		**/
 		Y.use('')	
 			// init drag instances
 			items.each(function(e,i){
@@ -146,9 +161,15 @@ YUI(GLOBAL_CONFIG).use('desktopManager','monitorFactory','dd-drag','dd-drop','dd
 	 * Deal Global Events
 	**/
 	Y.on('domready',function(){
-		var initdata = JSON.parse(localStorage.getItem("desktops"));
-		console.log('initdata',localStorage.getItem("desktops"),initdata);
-		desktop = new Y.DesktopManager(main,initdata);
+		var desktopData = JSON.parse(localStorage.getItem("desktops")),
+			myWidgets = JSON.parse(localStorage.getItem("widgets")),
+			widgetsData = widgets;// global
+		
+		// console.log('initdata',localStorage.getItem("desktops"),desktopData);
+		
+		
+		widgetManager = new Y.WidgetManager(widgetsData,myWidgets);
+		desktop = new Y.DesktopManager(main,desktopData);
 		render();
 		bindEvents();
 	});

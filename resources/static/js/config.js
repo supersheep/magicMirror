@@ -1,4 +1,12 @@
-var GLOBAL_CONFIG = {
+var APP_CONFIG = {
+	ajaxUrl		: '/ajax/view.php', // /board/ajax/viewDataAction
+	timefield	: 'time', // mirrorDatetime
+	dataParser	: function(data){
+		// return JSON.parse(JSON.parse(o.responseText).data); // Response data.
+		return JSON.parse(data).data;
+	}
+};
+var YUI_CONFIG = {
 	combine:false ,//  use the Yahoo! CDN combo service for YUI resources。
 	lang:"zh-Hans-CN",
 	filter:'raw',//默认加载模块的*-min.js压缩文件，通过配置raw或debug，可以加载模块对应的*.js或*-debug.js。
@@ -22,6 +30,10 @@ var GLOBAL_CONFIG = {
 		'desktop':{
 			fullpath:'/resources/static/js/app/desktop.js',
 			requires:['node','event-custom','monitorFactory'],
+		},
+		'widgetManager':{
+			fullpath:'/resources/static/js/app/widgetManager.js',
+			requires:['node','dd-drag','event-custom']
 		},
 		'desktopManager':{
 			fullpath:'/resources/static/js/app/desktopManager.js',                   

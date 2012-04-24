@@ -44,7 +44,7 @@ YUI.add('monitorFactory',function(Y){
 		var setting = pannel.config.setting;
 		
 		// pannel.uri = '/board/ajax/viewDataAction';
-		pannel.uri = '/ajax/view.php';
+		pannel.uri = APP_CONFIG['ajaxUrl'];
 		pannel.clock = setInterval(function(){
 	   		pannel.fetch();
 		},pannel.config.setting.interval || 5000);
