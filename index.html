@@ -17,49 +17,43 @@
 			<div class="manage">管理Widget…</div>
 			<div class="pannel">
 				<div class="inner">
-					<ul class="tools clear">
-							<li class="item" data-names="line" data-title="bar" data-xkey="time" data-ykeys="cn,cn" data-type="line">
-								<img src="/resources/static/img/1.png" alt="line"/>
-								<p class="title">line</p>
-							</li>
-							<li class="item" data-names="line" data-title="bar" data-xkey="time" data-ykeys="cn,cn" data-type="line">
-								<img src="/resources/static/img/1.png" alt="line"/>
-								<p class="title">line</p>
-							<li class="item" data-names="line" data-title="bar" data-xkey="time" data-ykeys="cn,cn" data-type="line">
-								<img src="/resources/static/img/1.png" alt="line"/>
-								<p class="title">line</p>
-							</li>
-					</ul>
-					
+					<ul class="tools clear"></ul>
 				</div>
 			</div>
-			
 		</div>
-		
 	</div>
 	
-	
-	
 	<script type="text/javascript">
-		var widgets = [{
-			"name":"line",
-			"xkey":"time",
-			"ykeys":"cn,cn",
-			"type":"line",
+		var widgetsData = [{
+			"size":[300,300],
+			"setting":{
+				"names":"line",
+				"xkey":"time",
+				"ykeys":"cn,cn",
+				"type":"line"
+			},
 			"title":"Line!",
 			"icon":"/resources/static/img/1.png"
 		},{
-			"name":"bar",
-			"xkey":"time",
-			"ykeys":"cn,cn",
-			"type":"line",
+			"size":[400,400],
+			"setting":{
+				"names":"bar",
+				"xkey":"time",
+				"ykeys":"cn,cn",
+				"start":"",
+				"end":"",
+				"type":"bar"
+			},
 			"title":"Line@",
 			"icon":"/resources/static/img/2.png"
 		},{
-			"name":"pie",
-			"xkey":"time",
-			"ykeys":"cn,cn",
-			"type":"line",
+			"size":[500,500],
+			"setting":{
+				"names":"pie",
+				"xkey":"time",
+				"ykeys":"cn,cn",
+				"type":"line"
+			},
 			"title":"Line#",
 			"icon":"/resources/static/img/3.png"
 		}];
