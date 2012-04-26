@@ -84,9 +84,9 @@ YUI(YUI_CONFIG).use('desktopManager','monitorFactory','widgetManager','dd-drag',
 	
 	
 	function init(desk,widgets,allwidgets){
-		if(desk && widgets){
-			desk = 	JSON.parse(desk);
-			widgets = JSON.parse(widgets);
+		if(desk!=null && widgets!=null){
+			desk = desk ? JSON.parse(desk) : {desktops:[[]],current:0};
+			widgets = widgets ? JSON.parse(widgets) : [];
 			
 			desktopManager = new Y.DesktopManager(main,desk);
 			widgetManager = new Y.WidgetManager(allwidgets,widgets,desktopManager);
@@ -105,10 +105,12 @@ YUI(YUI_CONFIG).use('desktopManager','monitorFactory','widgetManager','dd-drag',
 		
 		function success(id,o,type){
 			if(type == "desk"){
-				ls_desktopData = o.responseText;
+				ls_desktopData = APP_CONFIG['customDataParser'](o.responseText);
 			}else if(type == "widgets"){
-				ls_widgets = o.responseText;
+				ls_widgets = APP_CONFIG['customDataParser'](o.responseText);
 			}
+			
+			
 			init(ls_desktopData,ls_widgets,widgetsData);
 		}	
 		

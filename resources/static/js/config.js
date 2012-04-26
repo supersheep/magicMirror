@@ -34,6 +34,9 @@ var APP_CONFIG = {
 		// return JSON.parse(JSON.parse(o.responseText).data); // Response data.
 		return JSON.parse(data).data;
 	},
+	customDataParser:function(data){
+		return data
+	},
 	chartTypes	: {
 		"bar":{
 			"bars" : {

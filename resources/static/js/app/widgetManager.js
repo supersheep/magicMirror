@@ -51,7 +51,7 @@ YUI.add('widgetManager',function(Y){
 				
 				
 			// add a monitor to a desktop
-			Y.MonitorFactory.produce(o.title,xy,desktops.getCurrent(),{
+			Y.MonitorFactory.produce(o.title,xy,desktops.getCurrentDesktop(),{
 				setting:o.setting
 			});
 			

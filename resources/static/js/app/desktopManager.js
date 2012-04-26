@@ -16,7 +16,7 @@ YUI.add('desktopManager',function(Y){
 		self.container = container;		
 		
 	
-		Y.on('windowresize',Y.bind(self.render,self));
+		Y.on('windowresize',Y.bind(self.renderUI,self));
 		leftbtn.on('click',function(){
 			self.left();
 			self.sync();
