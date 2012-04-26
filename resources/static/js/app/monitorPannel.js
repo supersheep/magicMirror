@@ -13,19 +13,7 @@
 
 YUI.add('monitorPannel',function(Y){
 	console.log('monitorPannel',Y._yuid);
-	var CHART_TYPES = {
-			"bar":{"bars" : {
-        		show : true,
-        		shadowSize : 0,
-        		barWidth : 0.5
-    		}},
-			"line":{
-    			"bars":null
-    		},
-			"pie":{
-    			"bars":null
-    		}
-	};
+	
 	
 	
 	function modSuccess(id, o, self) {
@@ -47,6 +35,8 @@ YUI.add('monitorPannel',function(Y){
         	var d = dt.map(function(obj){
 			
 			var erroritem;
+			
+			// Error Warning
         	if( (obj[xkey]==null||obj[ykeys[i]]==null) && !self.isSetting){
 
         		erroritem = !obj[xkey]?"xkey":("ykeys"+i);
@@ -54,6 +44,8 @@ YUI.add('monitorPannel',function(Y){
         		self.setting();
         		alert(erroritem + '字段配置错误');
         	}
+        	
+        	
         		return [
         			obj[xkey],
         			obj[ykeys[i]]
@@ -62,6 +54,8 @@ YUI.add('monitorPannel',function(Y){
         	data.push({data:d,label:names[i]});
         });
         
+        
+        	console.log(JSON.stringify(data));
 		self.fire('data',data);
     };
 	
@@ -273,7 +267,7 @@ YUI.add('monitorPannel',function(Y){
 			var chart = self.config.chart;
 			data = self.data = data || self.data || [];	
 
-			chart = CHART_TYPES[self.config.setting.type];
+			chart = APP_CONFIG['chartTypes'][self.config.setting.type];
 			if(self.config.setting.xkey == APP_CONFIG["timefield"]){
 				chart = Y.merge(chart,{xaxis:{
 					"mode":"time",

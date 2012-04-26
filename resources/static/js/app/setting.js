@@ -11,7 +11,7 @@ YUI.add('setting',function(Y){
 	var CLS_FIELD = 'setting-field';
 	var CLS_UNIT = 'setting-unit';
 	var steps = ['year','month','day','hour','minute'];
-	var types = ['bar','line','pie'];
+	var types = ['bar','line','pie','bubble'];
 	var valueTextMap = {
 		'year':'年',
 		'month':'月',
@@ -26,6 +26,7 @@ YUI.add('setting',function(Y){
 		'freq':'刷新频率',
 		'type':'图表类型',
 		'active':'实时',
+		"bubble":'气泡图',
 		'bar':'柱状图',
 		'line':'线图',
 		'pie':'饼图'
@@ -43,7 +44,7 @@ YUI.add('setting',function(Y){
 				}
 			},
 			data:function(view){
-				return view ? +new Date(view) : '';
+				return view ? + new Date(view) : '';
 			}
 		}
 			
@@ -84,17 +85,6 @@ YUI.add('setting',function(Y){
 		'active':function(){
 			return Y.Node.create('<input type="checkbox" />');
 		}
-		/*
-		'step':function(){
-			var select = Y.Node.create('<select />');
-			steps.forEach(function(e){
-				var option = Y.Node.create('<option />');
-				option.set('value',e);
-				option.set('innerHTML',valueTextMap[e]);
-				option.appendTo(select);
-			});
-			return select;
-		}*/
 	};
 	
 	function setFieldValue(field,value){
@@ -105,7 +95,7 @@ YUI.add('setting',function(Y){
 			value = valueConverter[type]['view'](value);
 		}
 		
-		field.setAttribute('value',value);
+		field.set('value',value);
 	}
 	
 	function getFieldValue(field){

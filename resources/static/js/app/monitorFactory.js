@@ -7,12 +7,13 @@ YUI.add('monitorFactory',function(Y){
 		 *	@param axis	{Array}
 		 *  @param config	{Object}
 		**/
-		produce:function (type,axis,desktop,config){
-			var mod = monitors[type],
+		produce:function (name,axis,desktop,config){
+		
+			var mod = monitors[name],
 				realconfig;
 			
 			if(!mod){
-				throw "module "+type+" not defined";
+				throw "module "+name+" not defined";
 			}
 			
 			realconfig = Y.clone(config);
@@ -44,7 +45,7 @@ YUI.add('monitorFactory',function(Y){
 		var setting = pannel.config.setting;
 		
 		// pannel.uri = '/board/ajax/viewDataAction';
-		pannel.uri = APP_CONFIG['ajaxUrl'];
+		pannel.uri = APP_CONFIG['viewUrl'];
 		pannel.clock = setInterval(function(){
 	   		pannel.fetch();
 		},pannel.config.setting.interval || 5000);
@@ -52,33 +53,13 @@ YUI.add('monitorFactory',function(Y){
     }
 	
 	
+	widgetsData.forEach(function(w){
+			
+		addMod(w.title,fetcher,{
+			"size":w.size,
+			"setting":w.setting
+		});
 	
-	// two test modules
-	addMod("line",fetcher,{
-		"size":[300,300],
-		"chart":{},
-		"setting":{
-			"xkey":"",
-			"ykeys":"",
-			"names":"",
-			"start":"",
-			"end":"",
-			"type":"line",
-			"freq":"5"
-		}
-	});
-	
-	addMod("bar",fetcher,{
-		"size":[320,350],
-		"chart":{},
-		"setting":{
-			"xkey":"",
-			"ykeys":"",
-			"names":"",
-			"start":"",
-			"end":"",
-			"step":"year"
-		}
 	});
 	
 	

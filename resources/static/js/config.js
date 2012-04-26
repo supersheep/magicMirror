@@ -1,9 +1,59 @@
+var FORMATTERS = {
+	time:function(t){
+		var time = new Date(+t);
+		return	time.getFullYear() + "-" + (
+        		time.getMonth()+1) + "-" + 
+    			time.getDate() + " " + 
+    			time.getHours() + ":" + 
+				time.getMinutes();
+	}
+}
+
+var TRACK_FORMATTERS = {
+	time:function(d){	
+    	return 'Time:' + FORMATTERS['time'](d.x) + ',' + 'Val:' + d.y;
+	}
+}
+
 var APP_CONFIG = {
-	ajaxUrl		: '/ajax/view.php', // /board/ajax/viewDataAction
+	viewUrl		: '/ajax/view.php', // /board/ajax/viewDataAction
+	deskUrl		: '/ajax/desk.php',
+	widgetUrl	: '/ajax/widget.php',
 	timefield	: 'time', // mirrorDatetime
 	dataParser	: function(data){
 		// return JSON.parse(JSON.parse(o.responseText).data); // Response data.
 		return JSON.parse(data).data;
+	},
+	chartTypes	: {
+		"bar":{
+			"bars" : {
+	    		show : true,
+	    		shadowSize : 0,
+	    		barWidth : 0.5
+			},
+			"mouse" : { track : true }
+		},
+		"line":{
+			"bars":null,
+			"mouse" : { 
+				track : true,
+				trackFormatter:TRACK_FORMATTERS['time']
+			}
+		},
+		"bubble":{
+			"bubbles" : { 
+				show : true, 
+				baseRadius : 5 
+			},
+			"mouse" : { track : true }
+		},
+		"pie":{
+			"pie" : {
+		    	show : true, 
+		    	explode : 6
+		    },
+		    "mouse" : { track : true }
+		}
 	}
 };
 var YUI_CONFIG = {
