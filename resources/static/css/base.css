@@ -1,7 +1,8 @@
-body,div,h1,a,ul,li,p{padding:0;margin:0;}
+body,div,h1,a,ul,li,p{padding:0;margin:0;font-size:16px;font-family:sans-serif;}
 a{text-decoration:none;}
 ul,ol{list-style:none;}
 .clear:after{content:"";clear:both;display:block;}
+
 
 
 body{background-image:url('i/bg-main.png');}
@@ -19,7 +20,8 @@ body{background-image:url('i/bg-main.png');}
 .widget-manager .list .even{background-color:#fafafa;}
 .widget-manager .list .checkbox{height:34px;float:left;}
 .widget-manager .list .icon{width:34px;height:34px;margin-left:10px;float:left;}
-.widget-manager .list .name{margin-left:5px;float:left;}
+.widget-manager .list .title{margin-left:5px;float:left;}
+.widget-manager .close{width: 34px;height: 34px;position: absolute;background-image: url('i/add.png');z-index: 5;left: -17px;top: -17px;-webkit-transform: rotate(-135deg);}
 
 .wrap {position:relative;overflow:hidden;}
 .wrap .main{height:100%;position:relative;}
@@ -83,15 +85,15 @@ body{background-image:url('i/bg-main.png');}
 }
 
 .monitor .bface .ok{
-	border-radius: 10px;
+	border-radius: 15px;
 	border: 0;
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, .75)), to(rgba(255, 255, 255, 0)));
 	background-color: #444;
-	color: #EEE;
-	width: 40px;
-	padding: 3px 0;
+	color: #fff;
+	padding: 3px 15px;
 	text-shadow: -1px -1px 0 rgba(0, 0, 0, .3);
 	box-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+	font-size: 16px;
 }
 
 .monitor .close{position:absolute;width:34px;height:34px;color:#eff;left:-17px;top:-17px;background-image:url('i/remove.png');display:none;z-index:5;}
