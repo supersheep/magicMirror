@@ -244,7 +244,19 @@ YUI.add('desktopManager',function(Y){
 				current:this.current
 			};
 			
-			localStorage.setItem("desktops",JSON.stringify(data));
+			data = JSON.stringify(data);
+			
+			localStorage.setItem("desktops",data);
+			YUI().use('io',function(Y){
+				Y.on('io:success', function(){
+					console.log('desktop saved');
+				});
+   				Y.io(APP_CONFIG['deskUrl'],{
+					method: 'POST',
+					data: 'data='+data
+   				});
+			});
+			
 		}
 	}
 	
