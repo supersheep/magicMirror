@@ -12,10 +12,6 @@
 **/
 
 YUI.add('monitorPannel',function(Y){
-	console.log('monitorPannel',Y._yuid);
-	
-	
-	
 	function modSuccess(id, o, self) {
         // var id = id; // Transaction ID.
         var setting = self.config.setting;
@@ -40,7 +36,6 @@ YUI.add('monitorPannel',function(Y){
         	if( (obj[xkey]==null||obj[ykeys[i]]==null) && !self.isSetting){
 
         		erroritem = !obj[xkey]?"xkey":("ykeys"+i);
-        		console.log(self.isSetting);
         		self.setting();
         		alert(erroritem + '字段配置错误');
         	}
@@ -54,16 +49,14 @@ YUI.add('monitorPannel',function(Y){
         	data.push({data:d,label:names[i]});
         });
         
-        
-        	console.log(JSON.stringify(data));
 		self.fire('data',data);
     };
 	
 	
 	// should have event to rerender
 
-	var MonitorPannel = function(fetcher,xy,config){
-			
+	function MonitorPannel(fetcher,xy,config){
+			log('init',this);
 		this.isSetting = false;
 		this.config = config;
 		this.config.xy = xy;
@@ -87,20 +80,20 @@ YUI.add('monitorPannel',function(Y){
 	
 	MonitorPannel.prototype = {
 		constructor:MonitorPannel,
-		show:function(){},
-		hide:function(){},
-		addTo:function(desktop){
-			desktop.add(this);
+		show:function(){log('show',this);},
+		hide:function(){log('hide',this);},
+		addToDesktop:function(desktop){
+			log('addToDesktop',this);
+			desktop.addPannel(this);
 			this.desktop = desktop;
 			this.renderUI();
 			this.bindUI();
-			this.fetcher.call(this);
-		},
-		update:function(){
-			var elem = this.elem,
-				data = this.config;
+			if(desktop.desktops.getCurrentDesktop() == desktop){
+				this.fetcher.call(this);
+			}
 		},
 		setting:function(){
+			log('setting',this);
 			var self = this,
 				setting = self.config.setting,	
 				card = self.card,
@@ -122,6 +115,7 @@ YUI.add('monitorPannel',function(Y){
 			});
 		},
 		fetch:function(){
+			log('fetch',this);
 			var self = this,
 				uri = self.uri;
 			
@@ -139,20 +133,18 @@ YUI.add('monitorPannel',function(Y){
 				}
 				return "?" + ret.join("&");
 			}
-			
-			if( self.desktop.desktops.current == self.desktop.index){
+			if(self.desktop.desktops.getCurrentDesktop() == self.desktop){
 				YUI().use('io', function (Y) {
 					var query = querystr(params);
 				    Y.on('io:success', modSuccess,Y,self);
 	   				Y.io(uri + query );
+					log('fetch getData',self);
 				});
-	   		}
+			}
 	    },
 	    renderUI:function(){
+			log('renderUI',this);
 			function div(cls){return Y.Node.create('<div />').addClass(cls);}
-			
-			
-			
 			
 	    	var self = this,
 	    		desktop = this.desktop,
@@ -205,7 +197,7 @@ YUI.add('monitorPannel',function(Y){
 			elem.appendTo(container);
 	    },
 	    bindUI:function(){
-	    	
+			log('bindUI',this);
 	    	var self = this,
 	    		desktop = this.desktop,
 	    		close = this.close,
@@ -238,9 +230,8 @@ YUI.add('monitorPannel',function(Y){
 						h = e.info.offsetHeight;
 					self.config.size = [w,h];
 		
-					self.syncUI();
+					self.drawChart();
 					desktop.sync();
-					console.log("resize end");
 				});	
 			});
 			
@@ -250,18 +241,18 @@ YUI.add('monitorPannel',function(Y){
 			
 			drag.on('drag:end', function(e) {
 				self.config.xy = e.target.lastXY;
-				self.update();
 				desktop.sync();
 			});	
 			
 			this.close.on('click',Y.bind(this.destroy,this));
 			this.setbtn.on('click',Y.bind(this.setting,this));
 			this.on('data',function(data){
-				self.syncUI(data);
+				self.drawChart(data);
 			});
 			
 	    },
-		syncUI:function(data){	
+		drawChart:function(data){	
+			log('drawChart',this);
 			//return false;
 			var self = this;
 			var chart = self.config.chart;
@@ -275,10 +266,10 @@ YUI.add('monitorPannel',function(Y){
 				}});
 			};
 			
-			console.log(chart);
 			Flotr.draw(self.chartinner.getDOMNode(), data,chart);
 		},
 		destroy:function(){
+			log('destroy',this);
 			this.desktop.remove(this);
 		}
 	}

@@ -1,7 +1,8 @@
 YUI.add('desktopManager',function(Y){
 	var Dom = Y.Node;
 	
-	var DesktopManager = function(container,initdata){
+	function DesktopManager(container,initdata){
+		log('init',this);
 		var self = this,
 			leftbtn = self.leftbtn = Dom.create('<div/>').addClass('desktop-btn-left desktop-btns'),
 			rightbtn = self.rightbtn = Dom.create('<div/>').addClass('desktop-btn-right desktop-btns'),
@@ -16,12 +17,25 @@ YUI.add('desktopManager',function(Y){
 		
 	
 		Y.on('windowresize',Y.bind(self.render,self));
-		leftbtn.on('click',Y.bind(self.left,self));
-		rightbtn.on('click',Y.bind(self.right,self));	
-		addbtn.on('click',Y.bind(self.addto,self));
-		removebtn.on('click',Y.bind(self.remove,self));
+		leftbtn.on('click',function(){
+			self.left();
+			self.sync();
+		});
+		rightbtn.on('click',function(){
+			self.right();
+			self.sync();
+		});
+		addbtn.on('click',function(){
+			self.addDesktopAndSlideTo();
+			self.sync();
+		});
+		removebtn.on('click',function(){
+			self.remove();
+			self.sync();
+		});
 		spots.on('click',function(e){
-			self.to(e.target.getAttribute('data-index'));
+			self.slideTo(e.target.getAttribute('data-index'));
+			self.sync();
 		});
 		
 		
@@ -35,11 +49,11 @@ YUI.add('desktopManager',function(Y){
 		
 		if(!initdata){
 			self.add();
-			self.to(0);
+			self.slideTo(0);
 		}else{
 			self.current = initdata.current;
 			initdata.desktops.forEach(function(d){
-				var desk = self.add();
+				var desk = self.addDesktop();
 				d.forEach(function(cfg){
 					Y.MonitorFactory.produce(cfg.type,cfg.xy,desk,{
 						setting:cfg.setting,
@@ -49,13 +63,14 @@ YUI.add('desktopManager',function(Y){
 				});
 			});
 			
-			self.to(initdata.current);
+			self.slideTo(initdata.current);
 		}
 	}
 		
 	DesktopManager.prototype = {
 		constructor:DesktopManager,
-		render:function(){
+		renderUI:function(){
+			log('renderUI',this);
 			var self = this,
 			
 				list = self.list,
@@ -128,13 +143,14 @@ YUI.add('desktopManager',function(Y){
 			});
 		},
 		hideControls:function(){
+			log('hideControls',this);
 			var self = this;
 			"addbtn removebtn leftbtn rightbtn".split(' ').forEach(function(e){			
 				self[e].setStyle('opacity',0);
 			});
 		},
 		showControls:function(){
-			
+			log('showControls',this);
 			var self = this,
 			
 				leftbtn = self.leftbtn,
@@ -157,26 +173,30 @@ YUI.add('desktopManager',function(Y){
 			leftbtn.setStyle(OPACITY,opacityCondition(current <= 0));			
 			rightbtn.setStyle(OPACITY,opacityCondition(current >= last));
 		},
-		right:function(e){	
-		
+		right:function(e){
+			log('right',this);
 			if(this.current < this.desktops.length-1){
-				this.to(this.current+1);
+				this.slideTo(this.current+1);
 			}
 		},
-		left:function(){		
-		
+		left:function(){
+			log('left',this);
 			if(this.current > 0){
-				this.to(this.current-1);
+				this.slideTo(this.current-1);
 			}
 		},
-		to:function(n){
+		slideTo:function(n){
+			log('slideTo',this);
 			if(n>=0 && n<=this.desktops.length -1){
 				this.current = +n;
-				this.render();
+				this.renderUI();
+				this.getCurrentDesktop().pannels.forEach(function(pannel){
+					pannel.fetcher.call(pannel);
+				});
 			}
-			this.sync();
 		},
-		add:function(){
+		addDesktop:function(){
+			log('addDesktop',this);
 			var self = this,
 				max = self.max,
 				desktops = self.desktops,
@@ -192,15 +212,16 @@ YUI.add('desktopManager',function(Y){
 				list.append(desktop.elem);
 				//self.current = desktops.length - 1;
 				//self.render();
-				self.sync();
 				return desktop;
 			}
 		},
-		addto:function(){
-			this.add();
-			this.to(this.desktops.length - 1);
+		addDesktopAndSlideTo:function(){
+			log('addDesktopAndSlideTo',this);
+			this.addDesktop();
+			this.slideTo(this.desktops.length - 1);
 		},
-		remove:function(){
+		removeCurrentDesktop:function(){
+			log('removeCurrentDesktop',this);
 			var self = this,
 				list = self.list,
 				desktops = self.desktops,
@@ -225,15 +246,15 @@ YUI.add('desktopManager',function(Y){
 				
 				self.render();
 			}
-			
-			this.sync();
 		},
-		getCurrent:function(){
+		getCurrentDesktop:function(){
+			log('getCurrentDesktop',this);
 			return this.desktops[this.current];
 		},
 		
 		// 实际存数据的方法只留这一个
 		sync:function(){
+			log('sync',this);
 			var desktops = this.desktops.map(function(d){
 				return d.pannels.map(function(pan){
 					return pan.config;
@@ -249,7 +270,6 @@ YUI.add('desktopManager',function(Y){
 			localStorage.setItem("desktops",data);
 			YUI().use('io',function(Y){
 				Y.on('io:success', function(){
-					console.log('desktop saved');
 				});
    				Y.io(APP_CONFIG['deskUrl'],{
 					method: 'POST',

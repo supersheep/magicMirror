@@ -1,3 +1,12 @@
+function log(action,obj){
+	var title;
+	if(APP_CONFIG['debug']){
+		title = obj.constructor.name + ':' + action;
+		console.count(title);
+		//console.debug(title);
+	}
+}
+
 var FORMATTERS = {
 	time:function(t){
 		var time = new Date(+t);
@@ -16,6 +25,7 @@ var TRACK_FORMATTERS = {
 }
 
 var APP_CONFIG = {
+	debug		: true,
 	viewUrl		: '/ajax/view.php', // /board/ajax/viewDataAction
 	deskUrl		: '/ajax/desk.php',
 	widgetUrl	: '/ajax/widget.php',
@@ -56,6 +66,8 @@ var APP_CONFIG = {
 		}
 	}
 };
+
+
 var YUI_CONFIG = {
 	combine:false ,//  use the Yahoo! CDN combo service for YUI resources。
 	lang:"zh-Hans-CN",

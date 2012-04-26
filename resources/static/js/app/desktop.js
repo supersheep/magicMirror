@@ -27,7 +27,8 @@ YUI.add('desktop',function(Y){
 	
 	
 	
-	var Desktop = function(idx){
+	function Desktop(idx){
+			log('init',this);
 		this.elem = Dom.create('<div/>').addClass('desktop');
 		this.index = idx;
 		this.pannels = [];
@@ -35,11 +36,12 @@ YUI.add('desktop',function(Y){
 	
 	Desktop.prototype = {
 		constructor:Desktop,
-		add:function(modulePannel){
+		addPannel:function(modulePannel){
+			log('addPannel',this);
 			this.pannels.push(modulePannel);
-			this.sync();
 		},
-		remove:function(pannel){
+		removePannel:function(pannel){
+			log('removePannel',this);
 			var self = this,
 				arr = self.pannels,
 				l = arr.length;
@@ -64,19 +66,19 @@ YUI.add('desktop',function(Y){
 			
 			
 			self.pannels = kickoff(arr,i);
-			
-			self.sync();
 		},
 		resize:function(){
+			log('resize',this);
 			var elem = this.elem;
 			elem.setStyle('width',elem.get('winWidth'));
 		},
 		destroy:function(){
+			log('destroy',this);
 			this.pannels = [];
 			this.elem.remove();
-			this.sync();
 		},
 		sync:function(){
+			log('sync',this);
 			this.fire("sync");
 		}
 	}

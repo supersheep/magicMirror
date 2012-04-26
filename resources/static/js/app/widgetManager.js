@@ -61,6 +61,7 @@ YUI.add('widgetManager',function(Y){
 
 	
 	function WidgetManager(widgets,my_widgets,desktops){
+			log('init',this);
 		var self = this,
 			wrap = div('widgets'),
 			ul = dom('ul','list'),
@@ -68,7 +69,6 @@ YUI.add('widgetManager',function(Y){
 			close = this.close  = div('close');
 		
 		// my_widgets = my_widgets || [{name:"line"}];
-		console.log(my_widgets);
 		close.on('click',Y.bind(this.hide,this));
 		
 		elem.append(close);
@@ -85,8 +85,6 @@ YUI.add('widgetManager',function(Y){
 				checked = false,
 				title = dom('span','title').set('innerHTML',e.title);
 			
-			console.log(JSON.stringify(e));
-			
 			if(my_widgets.some(function(m){
 				return m.title == e.title;
 			})){
@@ -101,6 +99,7 @@ YUI.add('widgetManager',function(Y){
 				}else{
 					self.removeWidget(e,li,checkbox);
 				}
+				self.sync();
 			});
 				
 			li.append(checkbox);
@@ -120,6 +119,7 @@ YUI.add('widgetManager',function(Y){
 	WidgetManager.prototype = {
 		constructor : WidgetManager,
 		addWidget:function(e,li,checkbox){
+			log('addWidget',this);
 			var self = this,
 				witem = dom(li,'item'),
 				img = dom('img'),
@@ -142,9 +142,9 @@ YUI.add('widgetManager',function(Y){
 			
 			self.tools.append(witem);
 			self.my_widgets.push(e);
-			self.sync();
 		},
 		removeWidget:function(e,li,checkbox){
+			log('removeWidget',this);
 			var self = this,
 				my_widgets = self.my_widgets;
 			
@@ -164,14 +164,13 @@ YUI.add('widgetManager',function(Y){
 				}
 			});
 			
-			self.sync();
 		},
 		sync:function(){
+			log('sync',this);
 			var data = JSON.stringify(this.my_widgets);
 			localStorage.setItem('widgets',data);
 			YUI().use('io',function(Y){
 				Y.on('io:success', function(){
-					console.log('widget saved');
 				});
    				Y.io(APP_CONFIG['widgetUrl'],{
 					method: 'POST',
@@ -180,10 +179,11 @@ YUI.add('widgetManager',function(Y){
 			});
 		},
 		show : function(){
-			console.log('BOOM!!!');
+			log('show',this);
 			this.elem.setStyle('display','block');
 		},
 		hide:function(){
+			log('hide',this);
 			this.elem.setStyle('display','none');	
 		}
 	}

@@ -2,9 +2,8 @@ YUI.add('timepicker',function(Y){
 
     var dtdate = Y.DataType.Date;
 	
-	var TimePicker = function(wrapper){
-		//var DesktopManager = function(container,initdata){
-
+	function TimePicker(wrapper){
+		log('init:TimePicker');
 		var self = this;
 		var overlay =this.overlay = new Y.Overlay({
 			contentBox:Y.Node.create('<div />').addClass('yui3-skin-sam'),
@@ -40,6 +39,7 @@ YUI.add('timepicker',function(Y){
 	TimePicker.prototype = {
 		constructor:TimePicker,
 		show:function(){
+			log('show',this);
 			var el;
 			if(!this.shown){
 				this.overlay.show();
@@ -48,6 +48,7 @@ YUI.add('timepicker',function(Y){
 		},
 		
 		hide:function(){
+			log('show',this);
 			var el;
 			if(this.shown){
 				this.overlay.destroy();

@@ -107,7 +107,8 @@ YUI.add('setting',function(Y){
 		return value;
 	}
 	
-	var Setting = function(setting){
+	function Setting(setting){
+		log('init',this);
 		var self = this;
 		self.setting = setting;
 		self.controlMap = {};
@@ -117,6 +118,7 @@ YUI.add('setting',function(Y){
 	Setting.prototype = {
 			constructor : Setting,
 			renderUI:function(container){
+				log('renderUI',this);
 				var self = this;
 				var	complete = self.complete = Y.Node.create('<input type="button" value="好" class="ok" />');
 				var row,name,field,unit;
@@ -141,14 +143,16 @@ YUI.add('setting',function(Y){
 				self.bindUI();
 			},
 			bindUI:function(){
+				log('bindUI',this);
 				var self = this;
 				self.complete.on('click',function(){
 					// serialize setting to config
-					self._setback();
+					self.setback();
 					self.fire('complete',self.setting);
 				});
 			},
-			_setback:function(){
+			setback:function(){
+				log('setback',this);
 				var self = this;
 				var controlMap = self.controlMap;
 				var valueMap = self.valueMap;

@@ -18,7 +18,7 @@ YUI(YUI_CONFIG).use('desktopManager','monitorFactory','widgetManager','dd-drag',
 	
 	function render(){
 		wrap.setStyle('height',wrap.get('winHeight') - ( hd ? hd.get('clientHeight') : 0) );
-		desktopManager.render();
+		desktopManager.renderUI();
 	}
 	
 	function bindEvents(){

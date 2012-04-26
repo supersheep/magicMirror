@@ -1,14 +1,21 @@
 YUI.add('monitorFactory',function(Y){
 	var monitors = {};	
-
-	var MonitorFactory = {	
+	
+	function MonitorFactory(){
+		
+		log('init',this);
+	}
+	
+	MonitorFactory.prototype = {	
+		constructor:MonitorFactory,
 		/** 
 		 *	@param type	{String}
 		 *	@param axis	{Array}
 		 *  @param config	{Object}
 		**/
-		produce:function (name,axis,desktop,config){
 		
+		produce:function (name,axis,desktop,config){
+			log('produce',this);
 			var mod = monitors[name],
 				realconfig;
 			
@@ -24,9 +31,10 @@ YUI.add('monitorFactory',function(Y){
 			new Y.MonitorPannel(mod.fetcher,
 				axis,
 				realconfig
-			).addTo(desktop);	
+			).addToDesktop(desktop);	
 		},
 		add:function(type,fetcher,config){
+			log('add',this);
 			monitors[type] = {
 				fetcher:fetcher,
 				config:Y.merge({type:type},config)
@@ -34,7 +42,7 @@ YUI.add('monitorFactory',function(Y){
 		}
 	}
 	
-	var addMod = MonitorFactory.add;
+	var factory = new MonitorFactory();
 	
 	// functions for addMod
 	
@@ -47,15 +55,15 @@ YUI.add('monitorFactory',function(Y){
 		// pannel.uri = '/board/ajax/viewDataAction';
 		pannel.uri = APP_CONFIG['viewUrl'];
 		pannel.clock = setInterval(function(){
-	   		pannel.fetch();
+   			pannel.fetch();	
 		},pannel.config.setting.interval || 5000);
+		
 		pannel.fetch();
     }
 	
 	
 	widgetsData.forEach(function(w){
-			
-		addMod(w.title,fetcher,{
+		factory.add(w.title,fetcher,{
 			"size":w.size,
 			"setting":w.setting
 		});
@@ -63,5 +71,5 @@ YUI.add('monitorFactory',function(Y){
 	});
 	
 	
-	Y.MonitorFactory = MonitorFactory;
+	Y.MonitorFactory = factory;
 });
