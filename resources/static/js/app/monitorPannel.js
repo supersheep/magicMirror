@@ -133,6 +133,7 @@ YUI.add('monitorPannel',function(Y){
 				}
 				return "?" + ret.join("&");
 			}
+			
 			if(self.desktop.desktops.getCurrentDesktop() == self.desktop){
 				YUI().use('io', function (Y) {
 					var query = querystr(params);
@@ -235,8 +236,8 @@ YUI.add('monitorPannel',function(Y){
 			});
 			
 			drag = new Y.DD.Drag({
-				node: this.elem
-			}).addHandle(this.titlebar);
+				node: self.elem
+			}).addHandle(self.titlebar);
 			
 			
 			drag.plug(Y.Plugin.DDConstrained, {
@@ -248,9 +249,14 @@ YUI.add('monitorPannel',function(Y){
 				desktop.sync();
 			});	
 			
-			this.close.on('click',Y.bind(this.destroy,this));
-			this.setbtn.on('click',Y.bind(this.setting,this));
-			this.on('data',function(data){
+			self.close.on('click',function(){
+				self.destroy();
+				self.desktop.sync();
+			});
+			self.setbtn.on('click',function(){
+				self.setting();
+			});
+			self.on('data',function(data){
 				self.drawChart(data);
 			});
 			
@@ -274,7 +280,7 @@ YUI.add('monitorPannel',function(Y){
 		},
 		destroy:function(){
 			log('destroy',this);
-			this.desktop.remove(this);
+			this.desktop.removePannel(this);
 		}
 	}
 	
