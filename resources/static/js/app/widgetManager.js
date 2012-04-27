@@ -60,57 +60,62 @@ YUI.add('widgetManager',function(Y){
 
 
 	
-	function WidgetManager(widgets,my_widgets,desktops){
-			log('init',this);
+	function WidgetManager(all_widgets,my_widgets,desktops){
+		log('init',this);
 		var self = this,
 			wrap = div('widgets'),
 			ul = dom('ul','list'),
+			checkboxes = [],
 			elem = this.elem = div('widget-manager'),
 			close = this.close  = div('close');
-		
+			title = div('title').set('innerHTML','管理Widget…');
 		// my_widgets = my_widgets || [{name:"line"}];
 		close.on('click',Y.bind(this.hide,this));
 		
 		elem.append(close);
 		elem.append(wrap);
+		wrap.append(title);
 		wrap.append(ul);
 		
 		self.my_widgets = my_widgets;
 		self.tools = Y.Node.one('.tools');
-		self.desktops = desktops;
-		widgets.forEach(function(e,i){
+		self.desktops = desktops;		
+		self.checkboxes = checkboxes;
+		self.current_widgets = [];
+		
+		
+		all_widgets.forEach(function(widget,i){
 			var li = dom('li','clear ' + (i%2?'order':'even')),
 				checkbox = dom('input','checkbox').set('type','checkbox'),
-				img = dom('img','icon').set('src',e.icon),
-				checked = false,
-				title = dom('span','title').set('innerHTML',e.title);
+				img = dom('img','icon').set('src',widget.icon),
+				title = dom('span','title').set('innerHTML',widget.title);
 			
-			if(my_widgets.some(function(m){
-				return m.title == e.title;
-			})){
-				checked = true;
-				self.addWidget(e,li,checkbox);
-			}
-			
-			checkbox.on('click',function(){
-				checked = !checked;
-				if(checked){
-					self.addWidget(e,li,checkbox);
-				}else{
-					self.removeWidget(e,li,checkbox);
-				}
+			checkbox.on('click',function(e){
+				var checked = e.target.get('checked');
+				self[checked?'addWidget':'removeWidget'](widget,i);
 				self.sync();
 			});
-				
+			checkboxes.push(checkbox);
 			li.append(checkbox);
 			li.append(img);
 			li.append(title);
 			ul.append(li);
 		});
+		console.log('before pre add',self.current_widgets.length);
 		
+		my_widgets.forEach(function(widget,i){
+			for(var i = 0, l = all_widgets.length ; i < l ; i++ ){
+				if(all_widgets[i].title == widget.title){
+					self.addWidget(widget,i);
+					break;
+				}
+			}
+		});
+		
+		console.log('after pre add',self.current_widgets.length);
 		new Y.DD.Drag({
 			node: elem
-		});		
+		}).addHandle(title);	
 		elem.appendTo('body');
 		self.hide();
 		
@@ -118,15 +123,23 @@ YUI.add('widgetManager',function(Y){
 		
 	WidgetManager.prototype = {
 		constructor : WidgetManager,
-		addWidget:function(e,li,checkbox){
+		addWidget:function(e,i){
 			log('addWidget',this);
 			var self = this,
-				witem = dom(li,'item'),
+				checkbox = self.checkboxes[i],
+				witem = dom('li','item'),
 				img = dom('img'),
 				p = dom('p','title');
 			
-			li.addClass('active');
-				
+			
+			// already exist
+			if(self.current_widgets.some(function(widget,i){
+				return e.title == widget.title;
+			})){
+				return false;
+			};
+			
+			
 			img.set('src',e.icon);
 			img.set('alt',e.title);
 				
@@ -140,34 +153,37 @@ YUI.add('widgetManager',function(Y){
 			
 			checkbox.set('checked','checked');
 			
+			console.log('before add data',self.current_widgets.length,self.my_widgets.length);
 			self.tools.append(witem);
-			self.my_widgets.push(e);
+			self.current_widgets.push(e);
+			console.log('after add data',self.current_widgets.length,self.my_widgets.length);
 		},
-		removeWidget:function(e,li,checkbox){
+		removeWidget:function(e,i){
 			log('removeWidget',this);
 			var self = this,
-				my_widgets = self.my_widgets;
+				checkbox = self.checkboxes[i],
+				current_widgets = self.current_widgets;
 			
-			
-			li.removeClass('active');
-			
+			// remove from dom
 			Y.Node.all('.tools .item').each(function(el,i){
 				if(el.getAttribute('data-title') == e.title){
 					el.remove(true);
 				}
 			});
 			
-			my_widgets.forEach(function(el,i){
-				if(e.title == el.title){
-					my_widgets = my_widgets.slice(0,i).concat(my_widgets.slice(i+1,length));	
-					self.my_widgets = my_widgets;
+			console.log('before remove data',self.my_widgets.length);
+			// remove from data
+			current_widgets.forEach(function(widget,i){
+				if(widget.title == e.title){
+					current_widgets = current_widgets.slice(0,i).concat(current_widgets.slice(i+1,current_widgets.length));
 				}
 			});
-			
+			self.current_widgets = current_widgets;
+			console.log('after remove data',self.current_widgets.length);
 		},
 		sync:function(){
 			log('sync',this);
-			var data = JSON.stringify(this.my_widgets);
+			var data = JSON.stringify(this.current_widgets);
 			localStorage.setItem('widgets',data);
 			YUI().use('io',function(Y){
 				Y.on('io:success', function(){
