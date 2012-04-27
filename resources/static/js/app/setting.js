@@ -125,7 +125,6 @@ YUI.add('setting',function(Y){
 				
 				self.container = container;
 				
-				container.empty();
 				for(var key in self.setting){
 					row = Y.Node.create('<div />').addClass(CLS_ROW);
 					name = Y.Node.create('<span />').addClass(CLS_NAME).set('innerHTML',valueTextMap[key] + ':');
@@ -148,6 +147,7 @@ YUI.add('setting',function(Y){
 				self.complete.on('click',function(){
 					// serialize setting to config
 					self.setback();
+					
 					self.fire('complete',self.setting);
 				});
 			},
@@ -165,7 +165,9 @@ YUI.add('setting',function(Y){
 						// valueMap[key] = null 
 					}
 				}
+				self.container.empty();
 				self.setting = valueMap;
+				
 			}
 			
 	}

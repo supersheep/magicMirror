@@ -18,7 +18,7 @@ YUI.add('monitorFactory',function(Y){
 			log('produce',this);
 			var mod = monitors[name],
 				realconfig;
-			
+				
 			if(!mod){
 				throw "module "+name+" not defined";
 			}
@@ -33,11 +33,11 @@ YUI.add('monitorFactory',function(Y){
 				realconfig
 			).addToDesktop(desktop);	
 		},
-		add:function(type,fetcher,config){
+		add:function(title,fetcher,config){
 			log('add',this);
-			monitors[type] = {
+			monitors[title] = {
 				fetcher:fetcher,
-				config:Y.merge({type:type},config)
+				config:Y.merge({title:title},config)
 			};
 		}
 	}

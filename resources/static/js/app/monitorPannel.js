@@ -152,12 +152,12 @@ YUI.add('monitorPannel',function(Y){
 	    		size = this.config.size,
 	    		container = desktop.elem,
 	    		wh = {width:size[0],height:size[1]},
-	    		whinner = {width:size[0]-20,height:size[1]-30},
+	    		whinner = {width:size[0]-20,height:size[1]-40},
 	    		lt = {left:xy[0],top:xy[1]};
 	    	
 			var fface = div('fface'),
 				bface = div('bface'),
-				card,close,elem,chartinner,binner,setting;
+				card,close,elem,chartinner,titlebar,binner,setting;
 				
 			
 	    	this.chart = div('chart');
@@ -166,6 +166,7 @@ YUI.add('monitorPannel',function(Y){
 			this.binner = div('binner').setStyles(whinner);
 			
 			this.card = div('card');
+			this.titlebar = div('titlebar').set('innerHTML',this.config.title);
 			
 			this.close = div('close');
 			this.setbtn =  div('setting');
@@ -179,20 +180,18 @@ YUI.add('monitorPannel',function(Y){
 			binner = this.binner;
 			chart = this.chart;
 			setbtn = this.setbtn;
+			titlebar = this.titlebar;
 			
 			
-			close.appendTo(elem);
-			
-			card.appendTo(elem);
-			bface.appendTo(card);
-			fface.appendTo(card);
-			
-			setbtn.appendTo(fface);
-			chart.appendTo(fface);
-			
-			binner.appendTo(bface);
-			chartinner.appendTo(chart);
-			
+			elem.append(close);
+			elem.append(card);
+				card.append(bface);
+					bface.append(binner);
+				card.append(fface);
+					fface.append(titlebar);
+					fface.append(setbtn);
+					fface.append(chart);
+						chart.append(chartinner);
 			
 			elem.appendTo(container);
 	    },
@@ -213,9 +212,9 @@ YUI.add('monitorPannel',function(Y){
 	    	
 				resize.on('resize:resize',function(e){
 					var w = e.info.offsetWidth - 20;	
-						h = e.info.offsetHeight - 30;
+						h = e.info.offsetHeight - 40;
 					self.chartinner.setStyles({
-						'width':w,
+						'width':w ,
 						'height':h
 					});
 					
@@ -237,7 +236,12 @@ YUI.add('monitorPannel',function(Y){
 			
 			drag = new Y.DD.Drag({
 				node: this.elem
-			});		
+			}).addHandle(this.titlebar);
+			
+			
+			drag.plug(Y.Plugin.DDConstrained, {
+		        constrain2node: Y.Node.one('.desktop-list')
+		    });
 			
 			drag.on('drag:end', function(e) {
 				self.config.xy = e.target.lastXY;

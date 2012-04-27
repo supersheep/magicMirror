@@ -25,7 +25,7 @@ var TRACK_FORMATTERS = {
 }
 
 var APP_CONFIG = {
-	debug		: true,
+	debug		: false,
 	viewUrl		: '/ajax/view.php', // /board/ajax/viewDataAction
 	deskUrl		: '/ajax/desk.php',
 	widgetUrl	: '/ajax/widget.php',
@@ -86,7 +86,7 @@ var YUI_CONFIG = {
 		},
 		'monitorPannel':{			
 			fullpath:'/resources/static/js/app/monitorPannel.js',
-			requires:['node','dd-drag','resize','event-custom','io','setting']
+			requires:['node','dd-drag','dd-constrain','resize','event-custom','io','setting']
 		},
 		'monitorFactory':{
 			fullpath:'/resources/static/js/app/monitorFactory.js',
