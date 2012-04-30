@@ -47,13 +47,16 @@ YUI.add('widgetManager',function(Y){
 		
 		drag.on('drag:drophit', function(e) {
 			var xy = e.target.mouseXY,
+				desktop = desktops.getCurrentDesktop(),
 				node = this.get('node');
 				
 				
 			// add a monitor to a desktop
-			Y.MonitorFactory.produce(o.title,xy,desktops.getCurrentDesktop(),{
+			Y.MonitorFactory.produce(o.title,xy,desktop,{
 				setting:o.setting
 			});
+			
+			desktop.sync();
 			
 		});
 	}
@@ -101,7 +104,7 @@ YUI.add('widgetManager',function(Y){
 			li.append(title);
 			ul.append(li);
 		});
-		console.log('before pre add',self.current_widgets.length);
+		
 		
 		my_widgets.forEach(function(widget,i){
 			for(var i = 0, l = all_widgets.length ; i < l ; i++ ){
@@ -112,7 +115,7 @@ YUI.add('widgetManager',function(Y){
 			}
 		});
 		
-		console.log('after pre add',self.current_widgets.length);
+		
 		new Y.DD.Drag({
 			node: elem
 		}).addHandle(title);	
@@ -153,10 +156,9 @@ YUI.add('widgetManager',function(Y){
 			
 			checkbox.set('checked','checked');
 			
-			console.log('before add data',self.current_widgets.length,self.my_widgets.length);
 			self.tools.append(witem);
 			self.current_widgets.push(e);
-			console.log('after add data',self.current_widgets.length,self.my_widgets.length);
+			
 		},
 		removeWidget:function(e,i){
 			log('removeWidget',this);
@@ -171,15 +173,15 @@ YUI.add('widgetManager',function(Y){
 				}
 			});
 			
-			console.log('before remove data',self.my_widgets.length);
+			
 			// remove from data
 			current_widgets.forEach(function(widget,i){
 				if(widget.title == e.title){
-					current_widgets = current_widgets.slice(0,i).concat(current_widgets.slice(i+1,current_widgets.length));
+					current_widgets.splice(i,1);
 				}
 			});
-			self.current_widgets = current_widgets;
-			console.log('after remove data',self.current_widgets.length);
+			
+			
 		},
 		sync:function(){
 			log('sync',this);

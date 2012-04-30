@@ -28,15 +28,14 @@ YUI.add('monitorFactory',function(Y){
 			realconfig = Y.merge(mod.config,realconfig);
 			realconfig.setting = Y.mix(realconfig.setting,mod.config.setting||{});
 	
-			new Y.MonitorPannel(mod.fetcher,
+			new Y.MonitorPannel(
 				axis,
 				realconfig
 			).addToDesktop(desktop);	
 		},
-		add:function(title,fetcher,config){
+		add:function(title,config){
 			log('add',this);
 			monitors[title] = {
-				fetcher:fetcher,
 				config:Y.merge({title:title},config)
 			};
 		}
@@ -46,24 +45,8 @@ YUI.add('monitorFactory',function(Y){
 	
 	// functions for addMod
 	
-	function fetcher(){
-	    // Define a function to handle the response data.
-	    var pannel = this;
-	    var chart = pannel.config.chart;
-		var setting = pannel.config.setting;
-		
-		// pannel.uri = '/board/ajax/viewDataAction';
-		pannel.uri = APP_CONFIG['viewUrl'];
-		pannel.clock = setInterval(function(){
-   			pannel.fetch();	
-		},pannel.config.setting.interval || 5000);
-		
-		pannel.fetch();
-    }
-	
-	
 	widgetsData.forEach(function(w){
-		factory.add(w.title,fetcher,{
+		factory.add(w.title,{
 			"size":w.size,
 			"setting":w.setting
 		});

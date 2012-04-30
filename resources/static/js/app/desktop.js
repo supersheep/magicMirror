@@ -17,16 +17,6 @@ YUI.add('desktop',function(Y){
 	var winWidth,winHeight;
 	
 	
-	function kickoff(arr,index){
-		var i = +index;
-			before = arr.slice(0,i),
-			after = arr.slice(i+1,arr.length);
-		
-		return before.concat(after);
-	}
-	
-	
-	
 	function Desktop(idx){
 			log('init',this);
 		this.elem = Dom.create('<div/>').addClass('desktop');
@@ -42,30 +32,25 @@ YUI.add('desktop',function(Y){
 		},
 		removePannel:function(pannel){
 			log('removePannel',this);
-			var self = this,
-				arr = self.pannels,
-				l = arr.length;
-			for(var i = 0 ; i <= arr.length ; i++){
-				if(arr[i].guid == pannel.guid){
+			
+			var desktop = this,
+				pannels = desktop.pannels;
+				
+			for(var i = 0,l=pannels.length ; i < l ; i++){
+				if(pannels[i] == pannel){
 					break;
 				}
 			}
-			pannel.elem.setStyles({
-				'opacity':0
-			});
-			pannel.elem.one('.card').setStyles({
-				'width':0,
-				'height':0,
-				'overflow':'hidden'
-			});
+			
 			
 			// remove the pannel
-				clearInterval(pannel.clock);
-				self.elem.removeChild(pannel.elem);
-				pannel = null;
+			pannel.stopFetch();
 			
+			desktop.elem.removeChild(pannel.elem);
+			pannel = null;
+		
 			
-			self.pannels = kickoff(arr,i);
+			pannels.splice(i,1);
 		},
 		resize:function(){
 			log('resize',this);

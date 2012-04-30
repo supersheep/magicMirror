@@ -30,7 +30,7 @@ YUI.add('desktopManager',function(Y){
 			self.sync();
 		});
 		removebtn.on('click',function(){
-			self.remove();
+			self.removeCurrentDesktop();
 			self.sync();
 		});
 		spots.on('click',function(e){
@@ -188,10 +188,16 @@ YUI.add('desktopManager',function(Y){
 		slideTo:function(n){
 			log('slideTo',this);
 			if(n>=0 && n<=this.desktops.length -1){
+				// stop old;
+				this.getCurrentDesktop().pannels.forEach(function(pannel){
+					pannel.stopFetch();
+				});
 				this.current = +n;
 				this.renderUI();
+				
+				// start new 
 				this.getCurrentDesktop().pannels.forEach(function(pannel){
-					pannel.fetcher.call(pannel);
+					pannel.startFetch();
 				});
 			}
 		},
@@ -226,25 +232,24 @@ YUI.add('desktopManager',function(Y){
 				list = self.list,
 				desktops = self.desktops,
 				current = self.current,
-				item,
+				desktop = desktops[current],
 				prev = current - 1;
 			
 			if(desktops.length>1){
 				// do dirty things
-				item = list.all('.desktop').item(current);
 				
 				// remove all pannels of current desktops
-				current.pannels.forEach(function(pannel){
-					current.remove(pannel);
+				desktop.pannels.forEach(function(pannel){
+					desktop.removePannel(pannel);
 				});
 				
+				
 				// remove desktop from desktop list
-				self.desktops = desktops = kickoff(desktops,current);
-				list.removeChild(item);
+				desktops.splice(current,1);
+				list.removeChild(desktop.elem);
 				self.current = ( current == desktops.length) ? desktops.length-1 : current;
 				
-				
-				self.render();
+				self.renderUI();
 			}
 		},
 		getCurrentDesktop:function(){

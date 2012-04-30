@@ -49,19 +49,23 @@ YUI.add('monitorPannel',function(Y){
         	data.push({data:d,label:names[i]});
         });
         
-		self.fire('data',data);
+        try{
+			self.fire('data',data);
+		}catch(e){
+			console.log('fetch error occured ' + self.clock,self.elem,self.guid);
+		}
     };
 	
 	
 	// should have event to rerender
 
-	function MonitorPannel(fetcher,xy,config){
+	function MonitorPannel(xy,config){
 			log('init',this);
+			
 		this.isSetting = false;
 		this.config = config;
 		this.config.xy = xy;
 		this.config.size = config.size;
-		this.fetcher = fetcher;
 		
 		/* elem
 			-close
@@ -89,7 +93,7 @@ YUI.add('monitorPannel',function(Y){
 			this.renderUI();
 			this.bindUI();
 			if(desktop.desktops.getCurrentDesktop() == desktop){
-				this.fetcher.call(this);
+				this.startFetch();
 			}
 		},
 		setting:function(){
@@ -114,9 +118,43 @@ YUI.add('monitorPannel',function(Y){
 				self.isSetting = false;
 			});
 		},
+		startFetch:function(){
+			
+		    // Define a function to handle the response data.
+		    var pannel = this;
+			var setting = pannel.config.setting;
+			
+			if(!this.fetching){
+			
+				// pannel.uri = '/board/ajax/viewDataAction';
+				pannel.uri = APP_CONFIG['viewUrl'];
+				pannel.clock = setInterval(function(){
+					console.log('clock ' + pannel.clock + ' invoked');
+		   			pannel.fetch();
+				},setting.interval || 5000);
+				
+				pannel.fetch();
+				
+			}
+			
+			this.fetching = true;
+			
+		},
+		stopFetch:function(){
+		
+			if(this.fetching){
+				clearInterval(this.clock);
+				console.log(this.clock + 'cleared');
+				this.clock = null;
+			}
+			this.fetching = false;
+			
+		},
+		
 		fetch:function(){
 			log('fetch',this);
 			var self = this,
+				desktop = self.desktop,
 				uri = self.uri;
 			
 			var params = {
@@ -134,7 +172,7 @@ YUI.add('monitorPannel',function(Y){
 				return "?" + ret.join("&");
 			}
 			
-			if(self.desktop.desktops.getCurrentDesktop() == self.desktop){
+			if(desktop.desktops.getCurrentDesktop() == desktop){
 				YUI().use('io', function (Y) {
 					var query = querystr(params);
 				    Y.on('io:success', modSuccess,Y,self);
