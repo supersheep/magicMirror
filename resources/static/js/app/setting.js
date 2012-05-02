@@ -14,6 +14,8 @@ YUI.add('setting',function(Y){
 	var types = ['bar','line','pie','bubble'];
 	var valueTextMap = {
 		'year':'年',
+		'title':'标题',
+		'alias':'中文名',
 		'month':'月',
 		'day':'日',
 		'hour':'小时',
@@ -54,6 +56,12 @@ YUI.add('setting',function(Y){
 		'freq':'秒'
 	};
 	var renderMap = {
+		'title':function(){
+			return Y.Node.create('<input />');
+		},
+		'alias':function(){
+			return Y.Node.create('<input />');
+		},
 		'xkey':function(){
 			return Y.Node.create('<input />');
 		},
@@ -125,6 +133,7 @@ YUI.add('setting',function(Y){
 				
 				self.container = container;
 				
+				container.empty();
 				for(var key in self.setting){
 					row = Y.Node.create('<div />').addClass(CLS_ROW);
 					name = Y.Node.create('<span />').addClass(CLS_NAME).set('innerHTML',valueTextMap[key] + ':');
@@ -165,7 +174,6 @@ YUI.add('setting',function(Y){
 						// valueMap[key] = null 
 					}
 				}
-				self.container.empty();
 				self.setting = valueMap;
 				
 			}

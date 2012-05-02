@@ -51,13 +51,58 @@ border-radius:10px;
 left:300px;
 position:absolute;
 top:120px;
-width:250px;
 }
 
 .widget-manager .widgets {
-margin-bottom:20px;
 overflow:auto;
+z-index: 5;
+position: absolute;
+top: 0;
+background: #fff;
+width: 250px;
+border-radius: 5px;
+padding-bottom: 30px;
 }
+
+.widget-manager .editpannel{
+position: absolute;
+top:0;
+left:10px;
+width: 240px;
+background: #ccc;
+border-radius: 0 5px 5px 0;
+background: url(i/cloth.png);
+-webkit-transition: left .25s linear;
+-moz-transition: left .25s linear;
+-ms-transition: left .25s linear;
+}
+
+.widget-manager .editpannel .icon{
+margin:10px auto;
+width:50px;
+height:50px;
+background-color: #fff;
+}
+
+.widget-manager .editpannel .settings{
+    margin-left: 20px;
+
+}
+
+.widget-manager .editpannel .setting-name{
+color: white;
+display: inline-block;
+font-weight: 700;
+text-shadow: 0 1px 0 black;
+width: 75px;
+}
+
+.widget-manager .editpannel .setting-field{
+border: 0;
+border-radius: 5px;
+padding: 5px;
+}
+
 
 .widget-manager .widgets .title {
 cursor:default;
@@ -67,7 +112,7 @@ text-align:center;
 
 .widget-manager .list li {
 line-height:34px;
-padding:0 5px;
+padding: 0 10px;
 }
 
 .widget-manager .list .order {
@@ -81,6 +126,7 @@ background-color:#fafafa;
 .widget-manager .list .checkbox {
 float:left;
 height:34px;
+margin: 8px 0;
 }
 
 .widget-manager .list .icon {
@@ -88,6 +134,7 @@ float:left;
 height:34px;
 margin-left:10px;
 width:34px;
+padding: 8px 0;
 }
 
 .widget-manager .list .title {
@@ -105,7 +152,7 @@ left:-17px;
 position:absolute;
 top:-17px;
 width:34px;
-z-index:5;
+z-index: 15;
 }
 
 .wrap {
@@ -387,7 +434,9 @@ text-shadow:0 1px 0 #000;
 
 .monitor .bface .ok {
 background-color:#444;
-background-image:0 to(rgba(255,255,255,0)));
+background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, .75)), to(rgba(255, 255, 255, 0)));
+background-image: -moz-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, .75)), to(rgba(255, 255, 255, 0)));
+background-image: -ms-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, .75)), to(rgba(255, 255, 255, 0)));
 border:0;
 border-radius:15px;
 box-shadow:1px 1px 1px rgba(0,0,0,0.3);
@@ -441,5 +490,5 @@ display:none;
 }
 
 .monitor .set .fface .chart,.monitor .set .fface .setting {
-visibility:hidden;
+
 }

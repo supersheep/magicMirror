@@ -67,19 +67,27 @@ YUI.add('widgetManager',function(Y){
 		log('init',this);
 		var self = this,
 			wrap = div('widgets'),
+			pannel = div('pannel'),
+			editpannel = self.createEditPannel(),
 			ul = dom('ul','list'),
 			checkboxes = [],
 			elem = this.elem = div('widget-manager'),
-			close = this.close  = div('close');
-			title = div('title').set('innerHTML','管理Widget…');
+			close = this.close  = div('close'),
+			title = div('title').set('innerHTML','管理Widget…'),
+			createbtn = div('create').set('innerHTML','new');
 		// my_widgets = my_widgets || [{name:"line"}];
 		close.on('click',Y.bind(this.hide,this));
 		
 		elem.append(close);
 		elem.append(wrap);
-		wrap.append(title);
-		wrap.append(ul);
+			wrap.append(title);
+				title.append(createbtn);
+			wrap.append(ul);
+		elem.append(editpannel);
+		elem.appendTo('body');
 		
+		self.wrap = wrap;
+		self.editpannel = editpannel;
 		self.my_widgets = my_widgets;
 		self.tools = Y.Node.one('.tools');
 		self.desktops = desktops;		
@@ -115,11 +123,14 @@ YUI.add('widgetManager',function(Y){
 			}
 		});
 		
+		createbtn.on('click',function(){
+			self.createWidget();
+		});
+		
 		
 		new Y.DD.Drag({
 			node: elem
 		}).addHandle(title);	
-		elem.appendTo('body');
 		self.hide();
 		
 	}
@@ -173,15 +184,46 @@ YUI.add('widgetManager',function(Y){
 				}
 			});
 			
-			
 			// remove from data
 			current_widgets.forEach(function(widget,i){
 				if(widget.title == e.title){
 					current_widgets.splice(i,1);
 				}
 			});
+		},
+		createEditPannel:function(){
+			var editpannel = div('editpannel'),
+				icon = div('icon'),
+				iconhint = div('iconhint'),
+				settings = div('settings');
 			
+			editpannel.append(icon);
+				icon.append(iconhint);
+			editpannel.append(settings);
 			
+			this.settings = settings;
+			
+			return editpannel;
+			
+		},
+		createWidget:function(obj){
+			var self = this,
+				data = Y.merge({title:"",xkey:"",ykeys:"",names:"",alias:""},obj),
+				setting_pannel = new Y.Setting(data),
+				imgnode = dom('img'),
+				editpannel = self.editpannel;
+				
+			if(obj && obj.img){
+				imgnode.setAttribute('src',obj.img);
+				editpannel.one('.icon').append(imgnode);
+			}
+			setting_pannel.renderUI(self.settings);
+			setting_pannel.on('complete',function(data){
+				editpannel.setStyle('left',10);
+				console.log(data);
+			});
+			editpannel.setStyle('height',self.wrap.get('clientHeight'));
+			editpannel.setStyle('left',240);
 		},
 		sync:function(){
 			log('sync',this);
@@ -202,7 +244,7 @@ YUI.add('widgetManager',function(Y){
 		},
 		hide:function(){
 			log('hide',this);
-			this.elem.setStyle('display','none');	
+			this.elem.setStyle('display','block');	
 		}
 	}
 	

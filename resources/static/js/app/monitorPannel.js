@@ -194,8 +194,7 @@ YUI.add('monitorPannel',function(Y){
 	    		whinner = {width:size[0]-20,height:size[1]-40},
 	    		lt = {left:xy[0],top:xy[1]};
 	    	
-			var fface = div('fface'),
-				bface = div('bface'),
+			var fface,bface,
 				card,close,elem,chartinner,titlebar,binner,setting;
 				
 			
@@ -203,15 +202,16 @@ YUI.add('monitorPannel',function(Y){
 			this.chartinner = div('chart-inner').setStyles(whinner);
 			this.elem = div('monitor').setStyles(lt).setStyles(wh);
 			this.binner = div('binner').setStyles(whinner);
-			
+			this.bface = div('bface');
+			this.fface = div('fface');
 			this.card = div('card');
 			this.titlebar = div('titlebar').set('innerHTML',this.config.title);
 			
 			this.close = div('close');
 			this.setbtn =  div('setting');
 			
-			fface = div('fface');
-			bface = div('bface');
+			fface = this.fface;
+			bface = this.bface;
 			card = this.card;
 			close = this.close;
 			elem = this.elem;
@@ -275,7 +275,7 @@ YUI.add('monitorPannel',function(Y){
 			
 			drag = new Y.DD.Drag({
 				node: self.elem
-			}).addHandle(self.titlebar);
+			}).addHandle(self.titlebar).addHandle(self.bface);
 			
 			
 			drag.plug(Y.Plugin.DDConstrained, {
