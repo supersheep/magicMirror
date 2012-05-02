@@ -37,7 +37,7 @@ YUI.add('monitorPannel',function(Y){
 
         		erroritem = !obj[xkey]?"xkey":("ykeys"+i);
         		self.setting();
-        		alert(erroritem + '字段配置错误');
+        		alert(erroritem + '字段配置错误\r\n' + '对象信息：' + JSON.stringify(obj));
         	}
         	
         	
