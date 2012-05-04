@@ -25,9 +25,10 @@ var TRACK_FORMATTERS = {
 }
 
 var APP_CONFIG = {
-	debug		: false,
+	debug		: true,
 	viewUrl		: '/ajax/view.php', // /board/ajax/viewDataAction
 	deskUrl		: '/ajax/desk.php',
+	defineUrl	: '/ajax/define.php',
 	widgetUrl	: '/ajax/widget.php',
 	timefield	: 'time', // mirrorDatetime
 	dataParser	: function(data){
@@ -84,7 +85,7 @@ var YUI_CONFIG = {
 			fullpath:'/resources/static/js/app/setting.js',
 			requires:['node','event-custom','timepicker']
 		},
-		'monitorPannel':{			
+		'monitorPannel':{		
 			fullpath:'/resources/static/js/app/monitorPannel.js',
 			requires:['node','dd-drag','dd-constrain','resize','event-custom','io','setting']
 		},
@@ -92,13 +93,17 @@ var YUI_CONFIG = {
 			fullpath:'/resources/static/js/app/monitorFactory.js',
 			requires:['monitorPannel']
 		},
+		'dropImage':{
+			fullpath:'/resources/static/js/app/dropImage.js',
+			requires:['event-custom']
+		},
 		'desktop':{
 			fullpath:'/resources/static/js/app/desktop.js',
 			requires:['node','event-custom','monitorFactory'],
 		},
 		'widgetManager':{
 			fullpath:'/resources/static/js/app/widgetManager.js',
-			requires:['node','dd-drag','event-custom']
+			requires:['node','dd-drag','event-custom','dropImage']
 		},
 		'desktopManager':{
 			fullpath:'/resources/static/js/app/desktopManager.js',                   

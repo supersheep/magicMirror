@@ -48,9 +48,9 @@ margin-right:5px;
 .widget-manager {
 background-color:#fff;
 border-radius:10px;
-left:300px;
+left:50px;
 position:absolute;
-top:120px;
+top:50px;
 }
 
 .widget-manager .widgets {
@@ -78,15 +78,41 @@ background: url(i/cloth.png);
 }
 
 .widget-manager .editpannel .icon{
+position: relative;
 margin:10px auto;
 width:50px;
 height:50px;
 background-color: #fff;
 }
 
+.widget-manager .editpannel .imgholder{
+position: absolute;
+width: 50px;
+height: 50px;
+}
+
+.widget-manager .editpannel .imgholder img{
+width: 50px;
+height: 50px;
+}
+
+
+.widget-manager .editpannel .iconhint{
+position: absolute;
+background: rgba(0, 0, 0, 0.5);
+width: 40px;
+height: 40px;
+color: white;
+padding: 5px;
+font-size: 13px;
+}
+
 .widget-manager .editpannel .settings{
     margin-left: 20px;
+}
 
+.widget-manager .editpannel .setting-row{
+margin-bottom: 4px;
 }
 
 .widget-manager .editpannel .setting-name{
@@ -140,6 +166,12 @@ padding: 8px 0;
 .widget-manager .list .title {
 float:left;
 margin-left:5px;
+}
+
+.widget-manager .list .edit{
+float: right;
+line-height: 34px;
+padding: 8px 0;
 }
 
 .widget-manager .close {

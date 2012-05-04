@@ -55,7 +55,7 @@ YUI.add('desktopManager',function(Y){
 			initdata.desktops.forEach(function(d){
 				var desk = self.addDesktop();
 				d.forEach(function(cfg){
-					Y.MonitorFactory.produce(cfg.title,cfg.xy,desk,{
+					monitorFactory.produce(cfg.title,cfg.xy,desk,{
 						setting:cfg.setting,
 						size:cfg.size,
 						xy:cfg.xy

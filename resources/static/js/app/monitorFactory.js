@@ -1,9 +1,24 @@
 YUI.add('monitorFactory',function(Y){
-	var monitors = {};	
 	
 	function MonitorFactory(){
-		
 		log('init',this);
+		var self = this;
+		
+		function add(w){
+			self.add(w.config.title,{
+				"size":[300,300],
+				"title":w.config.title,
+				"setting":Y.merge({
+					"type":"line",
+					"start":"",
+					"end":""
+				},w.setting)
+			});
+		}
+		
+		self.monitors = {};
+		widgetManager.on('addone',add);
+		widgetsData.forEach(add);
 	}
 	
 	MonitorFactory.prototype = {	
@@ -16,43 +31,27 @@ YUI.add('monitorFactory',function(Y){
 		
 		produce:function (name,axis,desktop,config){
 			log('produce',this);
-			var mod = monitors[name],
-				realconfig;
+			var mod = this.monitors[name];
 				
 			if(!mod){
 				throw "module "+name+" not defined";
 			}
 			
-			realconfig = Y.clone(config);
-			
-			realconfig = Y.merge(mod.config,realconfig);
-			realconfig.setting = Y.mix(realconfig.setting,mod.config.setting||{});
-	
 			new Y.MonitorPannel(
 				axis,
-				realconfig
+				Y.merge(config,mod)
 			).addToDesktop(desktop);	
 		},
-		add:function(title,config){
+		add:function(title,mod){
 			log('add',this);
-			monitors[title] = {
-				config:Y.merge({title:title},config)
-			};
+			this.monitors[title] = mod;
 		}
 	}
 	
-	var factory = new MonitorFactory();
-	
 	// functions for addMod
 	
-	widgetsData.forEach(function(w){
-		factory.add(w.title,{
-			"size":w.size,
-			"setting":w.setting
-		});
-	
-	});
 	
 	
-	Y.MonitorFactory = factory;
+	
+	Y.MonitorFactory = MonitorFactory;
 });

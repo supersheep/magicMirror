@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>Magic Mirror</title>
+	<script type="text/javascript" src="/resources/static/js/yui3/build/yui/yui.js"></script>
+	<script type="text/javascript" src="/resources/static/js/config.js"></script>
+</head>
+
+<body>
+
+	<div id="dropcontainer" style="width:500px;height:500px;border:1px solid #ccc;">
+		drop image here
+	</div>
+	
+	<form id="a">
+		<input type="file" name="myfile" id="f" />
+		<a href="#" id="submit">submit</a>
+	</form>
+	
+	<script type="text/javascript">
+		var a = document.getElementById("submit");
+		
+		a.onclick = function(){
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST","/ajax/a.php",true);
+			xhr.send(new FormData(document.getElementById("a")));
+			return false;
+		}
+	</script>
+	
+	<script type="text/javascript">
+		YUI(YUI_CONFIG).use('dropImage','node',function(Y){
+			var dropper = Y.DropImage(Y.one("#dropcontainer"));
+		});
+	</script>
+
+</body>
+
+</html>

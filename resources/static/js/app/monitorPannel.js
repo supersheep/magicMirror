@@ -14,13 +14,13 @@
 YUI.add('monitorPannel',function(Y){
 	function modSuccess(id, o, self) {
         // var id = id; // Transaction ID.
-        var setting = self.config.setting;
+        var config = self.getConfig();
         var json = APP_CONFIG['dataParser'](o.responseText);
 		var data = [];
         
-		var names = setting.names.split(',');
-		var xkey = setting.xkey;
-		var ykeys = setting.ykeys.split(',');
+		var names = config.names.split(',');
+		var xkey = config.xkey;
+		var ykeys = config.ykeys.split(',');
         
         json.forEach(function(dt,i){
         	
@@ -34,9 +34,9 @@ YUI.add('monitorPannel',function(Y){
 			
 			// Error Warning
         	if( (obj[xkey]==null||obj[ykeys[i]]==null) && !self.isSetting){
-
+				
         		erroritem = !obj[xkey]?"xkey":("ykeys"+i);
-        		self.setting();
+        		//self.setting();
         		alert(erroritem + '字段配置错误\r\n' + '对象信息：' + JSON.stringify(obj));
         	}
         	
@@ -155,26 +155,25 @@ YUI.add('monitorPannel',function(Y){
 			log('fetch',this);
 			var self = this,
 				desktop = self.desktop,
+				config = self.getConfig(),
+				setting = self.config.setting,
 				uri = self.uri;
 			
-			var params = {
-				"viewName":"names",
-				"fromDate":"start",
-				"toDate":"end",
-				"xField":"xkey"
-			}
 			
-			function querystr(params){
+			function querystr(){
 				var ret = [];
-				for(var key in params){
-					ret.push(key + "=" + self.config.setting[params[key]]||'');
-				}
+				
+				ret.push("viewName="+config["names"]);
+				ret.push("xField="+config["xkey"]);
+				ret.push("fromDate"+setting["start"]);
+				ret.push("toDate"+setting["end"]);
+				
 				return "?" + ret.join("&");
 			}
 			
 			if(desktop.desktops.getCurrentDesktop() == desktop){
 				YUI().use('io', function (Y) {
-					var query = querystr(params);
+					var query = querystr();
 				    Y.on('io:success', modSuccess,Y,self);
 	   				Y.io(uri + query );
 					log('fetch getData',self);
@@ -299,15 +298,19 @@ YUI.add('monitorPannel',function(Y){
 			});
 			
 	    },
+	    getConfig:function(){
+	    	return widgetManager.getConfig(this.config.title);
+	    },
 		drawChart:function(data){	
 			log('drawChart',this);
 			//return false;
-			var self = this;
-			var chart = self.config.chart;
+			var self = this,
+				config = self.getConfig();
+			
 			data = self.data = data || self.data || [];	
 
 			chart = APP_CONFIG['chartTypes'][self.config.setting.type];
-			if(self.config.setting.xkey == APP_CONFIG["timefield"]){
+			if(config.xkey == APP_CONFIG["timefield"]){
 				chart = Y.merge(chart,{xaxis:{
 					"mode":"time",
 					"timeMode":"local"

@@ -1,6 +1,9 @@
 
 // TODO:
 // 1. Listen mousemove and show/hide elems
+var widgetManager,
+	monitorFactory,
+	desktopManager;
 
 YUI(YUI_CONFIG).use('desktopManager','monitorFactory','widgetManager','dd-drag','dd-drop','dd-proxy',function(Y) {
 	
@@ -12,9 +15,7 @@ YUI(YUI_CONFIG).use('desktopManager','monitorFactory','widgetManager','dd-drag',
 		toggle = toolbox.one('.toggle'),
 		manage = toolbox.one('.manage'),
 		toggled = false,
-		mousefield,
-		widgetManager,
-		desktopManager;
+		mousefield;
 	
 	function render(){
 		wrap.setStyle('height',wrap.get('winHeight') - ( hd ? hd.get('clientHeight') : 0) );
@@ -88,8 +89,10 @@ YUI(YUI_CONFIG).use('desktopManager','monitorFactory','widgetManager','dd-drag',
 			desk = desk ? JSON.parse(desk) : {desktops:[[]],current:0};
 			widgets = widgets ? JSON.parse(widgets) : [];
 			
+			
+			widgetManager = new Y.WidgetManager(allwidgets,widgets);
+			monitorFactory = new Y.MonitorFactory();
 			desktopManager = new Y.DesktopManager(main,desk);
-			widgetManager = new Y.WidgetManager(allwidgets,widgets,desktopManager);
 			
 			render();
 			bindEvents();
