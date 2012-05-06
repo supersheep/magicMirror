@@ -15,6 +15,12 @@ var FORMATTERS = {
     			time.getDate() + " " + 
     			time.getHours() + ":" + 
 				time.getMinutes();
+	},
+	kilo:function(v){
+		if(v>=1000){
+			return (v/1000).toFixed(1) + 'k';
+		}
+		return v;
 	}
 }
 
@@ -26,20 +32,33 @@ var TRACK_FORMATTERS = {
 
 var APP_CONFIG = {
 	debug		: true,
+	fetchItv	: 40,
 	viewUrl		: '/ajax/view.php', // /board/ajax/viewDataAction
 	deskUrl		: '/ajax/desk.php',
 	defineUrl	: '/ajax/define.php',
 	widgetUrl	: '/ajax/widget.php',
-	timefield	: 'time', // mirrorDatetime
+	timefield	: 'mirrorDatetime', // mirrorDatetime
 	dataParser	: function(data){
-		// return JSON.parse(JSON.parse(o.responseText).data); // Response data.
-		return JSON.parse(data).data;
+		var json = JSON.parse(data);
+		var data = JSON.parse(json.data);
+		
+		return {
+			data:data,
+			xkey:json.xField,
+			alias:json.viewAliasName,
+			names:json.viewName
+		}; // Response data.
+		//return JSON.parse(data).data;
 	},
 	customDataParser:function(data){
-		return data
+		//return data;
+		return JSON.parse(data).data;
 	},
 	chartTypes	: {
 		"bar":{
+			"yaxis":{
+				tickFormatter:FORMATTERS['kilo']
+			},
 			"bars" : {
 	    		show : true,
 	    		shadowSize : 0,
@@ -48,7 +67,9 @@ var APP_CONFIG = {
 			"mouse" : { track : true }
 		},
 		"line":{
-			"bars":null,
+			"yaxis":{
+				tickFormatter:FORMATTERS['kilo']
+			},
 			"mouse" : { 
 				track : true,
 				trackFormatter:TRACK_FORMATTERS['time']

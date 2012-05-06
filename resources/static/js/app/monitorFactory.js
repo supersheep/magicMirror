@@ -5,9 +5,9 @@ YUI.add('monitorFactory',function(Y){
 		var self = this;
 		
 		function add(w){
-			self.add(w.config.title,{
+			self.add(w.id,{
 				"size":[300,300],
-				"title":w.config.title,
+				"id":w.id,
 				"setting":Y.merge({
 					"type":"line",
 					"start":"",
@@ -29,12 +29,12 @@ YUI.add('monitorFactory',function(Y){
 		 *  @param config	{Object}
 		**/
 		
-		produce:function (name,axis,desktop,config){
+		produce:function (id,axis,desktop,config){
 			log('produce',this);
-			var mod = this.monitors[name];
+			var mod = this.monitors[id];
 				
 			if(!mod){
-				throw "module "+name+" not defined";
+				throw "module " + id + " not defined";
 			}
 			
 			new Y.MonitorPannel(
@@ -42,9 +42,9 @@ YUI.add('monitorFactory',function(Y){
 				Y.merge(config,mod)
 			).addToDesktop(desktop);	
 		},
-		add:function(title,mod){
+		add:function(id,mod){
 			log('add',this);
-			this.monitors[title] = mod;
+			this.monitors[id] = mod;
 		}
 	}
 	

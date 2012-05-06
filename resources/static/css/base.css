@@ -77,6 +77,51 @@ background: url(i/cloth.png);
 -ms-transition: left .25s linear;
 }
 
+
+.widget-manager .editpannel .iconpannel{
+position: absolute;
+opacity: 0;
+top: 0;
+left: 60px;
+-webkit-transition: all .25s ease-in-out;
+-moz-transform: all .25s ease-in-out;
+-ms-transform: all .25s ease-in-out;
+}
+
+.widget-manager .editpannel .iconpannel_inner{
+overflow: hidden;
+width: 0;
+height: 0;
+-webkit-transition: all .25s ease-in-out;
+-moz-transform: all .25s ease-in-out;
+-ms-transform: all .25s ease-in-out;
+background-color: white;
+}
+
+.widget-manager .editpannel .icon_list{
+width:200px;
+height:200px;
+}
+
+.widget-manager .editpannel .iconpannel:after{
+display: block;
+content: '';
+top: 15px;
+left: -20px;
+border-style: solid;
+border-width: 10px;
+border-color: transparent white transparent transparent;
+position: absolute;
+}
+
+.widget-manager .editpannel .iconpannel img{
+float:left;
+margin:10px;
+width:30px;
+height:30px;
+}
+
+
 .widget-manager .editpannel .icon{
 position: relative;
 margin:10px auto;

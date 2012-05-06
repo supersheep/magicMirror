@@ -22,31 +22,35 @@ YUI.add('monitorPannel',function(Y){
 		var xkey = config.xkey;
 		var ykeys = config.ykeys.split(',');
         
-        json.forEach(function(dt,i){
-        	
+        var alias = json.alias.split(',');
+        
+        // multi view data
+        json.data.forEach(function(dt,i){
+        
+        	// one view data
         	dt = dt.sort(function(a,b){
         		return a[xkey] - b[xkey];
         	});
         	        	
         	var d = dt.map(function(obj){
 			
-			var erroritem;
-			
-			// Error Warning
-        	if( (obj[xkey]==null||obj[ykeys[i]]==null) && !self.isSetting){
+				var erroritem;
 				
-        		erroritem = !obj[xkey]?"xkey":("ykeys"+i);
-        		//self.setting();
-        		alert(erroritem + '字段配置错误\r\n' + '对象信息：' + JSON.stringify(obj));
-        	}
-        	
+				// Error Warning
+	        	if( (obj[xkey]==null||obj[ykeys[i]]==null) && !self.isSetting){
+					
+	        		erroritem = !obj[xkey]?"xkey":("ykeys"+i);
+	        		console.error(erroritem + '字段配置错误\r\n' + '对象信息：',JSON.stringify(obj));
+	        		//self.stopFetch();
+	        	}
         	
         		return [
         			obj[xkey],
         			obj[ykeys[i]]
         		];
         	});
-        	data.push({data:d,label:names[i]});
+        	
+        	data.push({data:d,label:alias[i]});
         });
         
         try{
@@ -119,7 +123,7 @@ YUI.add('monitorPannel',function(Y){
 			});
 		},
 		startFetch:function(){
-			
+			console.trace();
 		    // Define a function to handle the response data.
 		    var pannel = this;
 			var setting = pannel.config.setting;
@@ -131,13 +135,12 @@ YUI.add('monitorPannel',function(Y){
 				pannel.clock = setInterval(function(){
 					console.log('clock ' + pannel.clock + ' invoked');
 		   			pannel.fetch();
-				},setting.interval || 5000);
+				},setting.interval || APP_CONFIG['fetchItv'] * 1000);
 				
 				pannel.fetch();
-				
+				this.fetching = true;
 			}
 			
-			this.fetching = true;
 			
 		},
 		stopFetch:function(){
@@ -146,8 +149,8 @@ YUI.add('monitorPannel',function(Y){
 				clearInterval(this.clock);
 				console.log(this.clock + 'cleared');
 				this.clock = null;
+				this.fetching = false;
 			}
-			this.fetching = false;
 			
 		},
 		
@@ -189,6 +192,7 @@ YUI.add('monitorPannel',function(Y){
 	    		xy = this.config.xy,
 	    		size = this.config.size,
 	    		container = desktop.elem,
+	    		config = self.getConfig(),
 	    		wh = {width:size[0],height:size[1]},
 	    		whinner = {width:size[0]-20,height:size[1]-40},
 	    		lt = {left:xy[0],top:xy[1]};
@@ -204,7 +208,7 @@ YUI.add('monitorPannel',function(Y){
 			this.bface = div('bface');
 			this.fface = div('fface');
 			this.card = div('card');
-			this.titlebar = div('titlebar').set('innerHTML',this.config.title);
+			this.titlebar = div('titlebar').set('innerHTML',config.title);
 			
 			this.close = div('close');
 			this.setbtn =  div('setting');
@@ -299,7 +303,7 @@ YUI.add('monitorPannel',function(Y){
 			
 	    },
 	    getConfig:function(){
-	    	return widgetManager.getConfig(this.config.title);
+	    	return widgetManager.getConfig(this.config.id);
 	    },
 		drawChart:function(data){	
 			log('drawChart',this);

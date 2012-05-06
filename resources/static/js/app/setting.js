@@ -115,31 +115,39 @@ YUI.add('setting',function(Y){
 		return value;
 	}
 	
-	function Setting(setting){
+	function Setting(data,container){
 		log('init',this);
 		var self = this;
-		self.setting = setting;
+		self.data = data;
+		self.container = container;
 		self.controlMap = {};
 		self.valueMap = {};
 	}
 
 	Setting.prototype = {
 			constructor : Setting,
-			renderUI:function(container){
+			setData:function(data){
+				this.data = data;
+			},
+			renderUI:function(wrapper){
 				log('renderUI',this);
 				var self = this;
+				var container = wrapper || self.container;
+				var data = self.data;
 				var	complete = self.complete = Y.Node.create('<input type="button" value="好" class="ok" />');
 				var row,name,field,unit;
 				
-				self.container = container;
+				if(container){
+					self.container = container;
+				}
 				
 				container.empty();
-				for(var key in self.setting){
+				for(var key in data){
 					row = Y.Node.create('<div />').addClass(CLS_ROW);
 					name = Y.Node.create('<span />').addClass(CLS_NAME).set('innerHTML',valueTextMap[key] + ':');
 					field = self.controlMap[key] =  renderMap[key] && renderMap[key]().addClass(CLS_FIELD);
 					unit = Y.Node.create('<span />').addClass(CLS_UNIT).set('innerHTML',unitMap[key]||'');
-					setFieldValue(field,self.setting[key]);
+					setFieldValue(field,data[key]);
 					if(name && field && row){
 						row.append(name);
 						row.append(field);
@@ -148,16 +156,10 @@ YUI.add('setting',function(Y){
 					}
 				}
 				container.append(complete);
-				self.bindUI();
-			},
-			bindUI:function(){
-				log('bindUI',this);
-				var self = this;
-				self.complete.on('click',function(){
-					// serialize setting to config
+				
+				complete.on('click',function(){
 					self.setback();
-					
-					self.fire('complete',self.setting);
+					self.fire('complete',self.data);
 				});
 			},
 			setback:function(){
@@ -174,7 +176,7 @@ YUI.add('setting',function(Y){
 						// valueMap[key] = null 
 					}
 				}
-				self.setting = valueMap;
+				self.data = valueMap;
 				
 			}
 			
