@@ -14,6 +14,22 @@ YUI.add('widgetManager',function(Y){
 		
 	}
 	
+	function parseKey(obj){
+		var map = {
+			"title":"name",
+			"xkey":"xField",
+			"ykeys":"yField",
+			"names":"view"
+		},ret = {};
+		
+		for(var i in obj){
+			ret[map[i]] = obj[i];
+		}
+		
+		return ret;
+	}
+	
+	
 	
 	function initDrag(li,o){
 		// 初始化拖放
@@ -270,7 +286,7 @@ YUI.add('widgetManager',function(Y){
 					
 	   				Y.io(APP_CONFIG['defineUrl'],{
         				method: "POST",
-        				data:Y.merge({id:id},setting)
+        				data:parseKey(Y.merge({id:id},setting))
 	   				});
 				});
 			});
@@ -300,7 +316,7 @@ YUI.add('widgetManager',function(Y){
 					
 	   				Y.io(APP_CONFIG['defineUrl'],{
         				method: "POST",
-        				data:setting
+        				data:parseKey(setting)
 	   				});
 				});
 				
