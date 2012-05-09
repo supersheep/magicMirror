@@ -166,12 +166,14 @@ display: inline-block;
 font-weight: 700;
 text-shadow: 0 1px 0 black;
 width: 75px;
+font-size: 14px;
 }
 
 .widget-manager .editpannel .setting-field{
 border: 0;
 border-radius: 5px;
 padding: 5px;
+width: 125px;
 }
 
 
@@ -196,8 +198,9 @@ background-color:#fafafa;
 
 .widget-manager .list .checkbox {
 float:left;
-height:34px;
-margin: 8px 0;
+line-height: 24px;
+margin: 18px 0;
+background-color: transparent;
 }
 
 .widget-manager .list .icon {
@@ -495,6 +498,7 @@ display:inline-block;
 font-weight:700;
 text-shadow:0 1px 0 #000;
 width:75px;
+font-size: 14px;
 }
 
 .monitor .bface .setting-field {
