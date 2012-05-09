@@ -14,17 +14,38 @@ YUI.add('widgetManager',function(Y){
 		
 	}
 	
+	// server to client
+	function parseData(data){
+		return {
+			config:{
+				title:data.name,
+				names:data.view,
+				xkey:data.xField,
+				ykeys:data.yField
+			},
+			icon:data.imageSource,
+			id:data.id
+		};
+	}
+	
+	
+	// client to server
 	function parseKey(obj){
 		var map = {
 			"title":"name",
 			"xkey":"xField",
 			"ykeys":"yField",
-			"names":"view"
+			"names":"view",
+			"id":"id",
+			"icon":"imageSource"
 		},ret = {};
 		
 		for(var i in obj){
 			ret[map[i]] = obj[i];
 		}
+		
+		ret["mode"] = obj["mode"] || "save";
+		                  
 		
 		return ret;
 	}
@@ -132,6 +153,10 @@ YUI.add('widgetManager',function(Y){
 	
 	Y.augment(IconPannel, Y.EventTarget);
 	
+	
+	
+	
+	
 	function MyWidgetLi(widgetdata){
 		var self = this;
 		
@@ -164,9 +189,7 @@ YUI.add('widgetManager',function(Y){
 			this.elem.appendTo(node);
 		}
 	}
-	
-	
-	
+		
 	Y.augment(MyWidgetLi, Y.EventTarget);
 	
 	
@@ -235,6 +258,7 @@ YUI.add('widgetManager',function(Y){
 		self.icon_pannel = icon_pannel;
 		self.iconhint = iconhint;
 		self.imgholder = imgholder;
+		self.iconsrc = "";
 		
 		elem.append(icon);
 			icon.append(icon_pannel.elem);
@@ -265,6 +289,8 @@ YUI.add('widgetManager',function(Y){
 				id = widgetdata.id,
 				imgnode = dom('img').setAttribute('src',widgetdata.icon);
 				setting_pannel = self.setting_pannel;
+
+			self.iconsrc = widgetdata.icon;
 			
 			setting_pannel.setData(widgetdata.config);
 			
@@ -276,17 +302,19 @@ YUI.add('widgetManager',function(Y){
 			
 			setting_pannel.detach('complete');
 			setting_pannel.on('complete',function(setting){
-				
 				YUI().use('io',function(Y){
 					Y.on('io:success', function(id, o){
 						var data = JSON.parse(o.responseText);
-						self.fire('update',data);
+						self.fire('update',parseData(data));
+						setTimeout(function(){
+							setting_pannel.empty();
+						},500);
 						self.hide();
 					},Y);
 					
 	   				Y.io(APP_CONFIG['defineUrl'],{
         				method: "POST",
-        				data:parseKey(Y.merge({id:id},setting))
+        				data:parseKey(Y.merge({id:id,icon:self.iconsrc},setting))
 	   				});
 				});
 			});
@@ -298,6 +326,8 @@ YUI.add('widgetManager',function(Y){
 
 			setting_pannel.setData({title:"",names:"",xkey:"",ykeys:""});
 
+			self.iconsrc = "";
+			
 			self.imgholder.empty();
 			
 			self.iconhint.setStyle('visibility','visible');
@@ -310,13 +340,16 @@ YUI.add('widgetManager',function(Y){
 				YUI().use('io',function(Y){
 					Y.on('io:success', function(id, o){
 						var data = JSON.parse(o.responseText);
-						self.fire('create',data);
+						self.fire('create',parseData(data));
+						setTimeout(function(){
+							setting_pannel.empty();
+						},500);
 						self.hide();
 					},Y);
 					
 	   				Y.io(APP_CONFIG['defineUrl'],{
         				method: "POST",
-        				data:parseKey(setting)
+        				data:parseKey(Y.merge({icon:self.iconsrc},setting))
 	   				});
 				});
 				
@@ -335,7 +368,6 @@ YUI.add('widgetManager',function(Y){
 		}
 		
 	}
-	
 	
 	Y.augment(EditPannel, Y.EventTarget);
 	

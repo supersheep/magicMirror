@@ -162,6 +162,9 @@ YUI.add('setting',function(Y){
 					self.fire('complete',self.data);
 				});
 			},
+			empty:function(){
+				this.container.empty();
+			},
 			setback:function(){
 				log('setback',this);
 				var self = this;
