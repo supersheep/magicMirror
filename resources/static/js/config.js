@@ -31,7 +31,7 @@ var TRACK_FORMATTERS = {
 }
 
 var APP_CONFIG = {
-	debug		: true,
+	debug		: false,
 	fetchItv	: 40,
 	viewUrl		: '/ajax/view.php', // /board/ajax/viewDataAction
 	deskUrl		: '/ajax/desk.php',

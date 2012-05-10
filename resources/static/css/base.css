@@ -1,5 +1,5 @@
 body,div,h1,a,ul,li,p {
-font-family:sans-serif;
+font: 62.5%/160% "Microsoft JhengHei","Hiragino Sans GB","微軟正黑體","Microsoft YaHei","微软雅黑",Verdana, Arial, Helvetica, sans-serif;
 font-size:16px;
 margin:0;
 padding:0;
@@ -12,6 +12,14 @@ text-decoration:none;
 ul,ol {
 list-style:none;
 }
+
+
+::-webkit-scrollbar-track-piece{background-color:#fafafa;-webkit-border-radius:0;-webkit-border-bottom-right-radius:8px;-webkit-border-bottom-left-radius:8px;border-top-left-radius:0;border-top-right-radius:0;border-bottom-right-radius:8px 8px;border-bottom-left-radius:8px 8px;}
+::-webkit-scrollbar{width:7px;height:7px;}
+::-webkit-scrollbar-button:start:decrement,.school-list ::-webkit-scrollbar-button:end:increment{
+display:block;height:0;background-color:transparent;}
+::-webkit-scrollbar-thumb:vertical{height:50px;background-color:rgba(0,0,0,0.4);-webkit-border-radius:8px;}
+::-webkit-scrollbar-thumb:horizontal{width:50px;background-color:rgba(0,0,0,0.4);-webkit-border-radius:8px;}
 
 .clear:after {
 clear:both;
@@ -45,6 +53,48 @@ margin-right:15px;
 margin-right:5px;
 }
 
+.btn{
+display: inline-block;
+height: 22px;
+border-radius: 11px;
+-webkit-border-radius: 11px;
+-moz-border-radius: 11px;
+-ms-border-radius: 11px;
+border-width: 1px;
+border-style: solid;
+text-decoration: none;
+font-size: 12px;
+color: black;
+text-shadow: 0 1px 0 rgba(255,255,255,0.09);
+-webkit-text-shadow: 0 1px 0 rgba(255,255,255,0.09);
+-moz-text-shadow: 0 1px 0 rgba(255,255,255,0.09);
+-ms-text-shadow: 0 1px 0 rgba(255,255,255,0.09);
+margin-right: 10px;
+text-align: center;
+width: 50px;
+padding: 3px;
+}
+
+.btn.cancel{
+border-color: #9A9A9A;
+background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, #EBEBEB), color-stop(0.5, #ECECEC), color-stop(0.5, #F3F3F3), color-stop(1, white) );
+background-image: -moz-gradient( linear, left bottom, left top, color-stop(0, #EBEBEB), color-stop(0.5, #ECECEC), color-stop(0.5, #F3F3F3), color-stop(1, white) );
+background-image: -ms-gradient( linear, left bottom, left top, color-stop(0, #EBEBEB), color-stop(0.5, #ECECEC), color-stop(0.5, #F3F3F3), color-stop(1, white) );
+-webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 1px 0 rgba(0,0,0,0.09);
+-moz-box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 1px 0 rgba(0,0,0,0.09);
+-ms-box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 1px 0 rgba(0,0,0,0.09);
+}
+
+.btn.ok{
+border-top-color: #5A5CAF;
+border-bottom-color: #52536F;
+border-left-color: #56578F;
+border-right-color: #56578F;
+background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, #D3F7FD), color-stop(0.5, #87C5FB), color-stop(0.5, #A1D1F9), color-stop(1, #D4E9FC));
+background-image: -moz-gradient( linear, left bottom, left top, color-stop(0, #D3F7FD), color-stop(0.5, #87C5FB), color-stop(0.5, #A1D1F9), color-stop(1, #D4E9FC));
+background-image: -ms-gradient( linear, left bottom, left top, color-stop(0, #D3F7FD), color-stop(0.5, #87C5FB), color-stop(0.5, #A1D1F9), color-stop(1, #D4E9FC));
+}
+
 .widget-manager {
 background-color:#fff;
 border-radius:10px;
@@ -63,6 +113,16 @@ width: 250px;
 border-radius: 5px;
 padding-bottom: 30px;
 }
+
+.widget-manager .list {
+max-height:300px;
+overflow:auto;
+}
+
+.widget-manager .list:hover {
+overflow:auto;
+}
+
 
 .widget-manager .editpannel{
 position: absolute;
@@ -183,6 +243,11 @@ padding:8px;
 text-align:center;
 }
 
+.widget-manager .widgets .title .create{
+background: url('i/plus.png') no-repeat center center;
+text-indent: -999px;
+}
+
 .widget-manager .list li {
 line-height:34px;
 padding: 0 10px;
@@ -217,9 +282,11 @@ margin-left:5px;
 }
 
 .widget-manager .list .edit{
+background: url('i/pencil.png') no-repeat center center;
 float: right;
 line-height: 34px;
 padding: 8px 0;
+text-indent: -999px;
 }
 
 .widget-manager .close {
@@ -513,19 +580,6 @@ margin-left:5px;
 text-shadow:0 1px 0 #000;
 }
 
-.monitor .bface .ok {
-background-color:#444;
-background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, .75)), to(rgba(255, 255, 255, 0)));
-background-image: -moz-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, .75)), to(rgba(255, 255, 255, 0)));
-background-image: -ms-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, .75)), to(rgba(255, 255, 255, 0)));
-border:0;
-border-radius:15px;
-box-shadow:1px 1px 1px rgba(0,0,0,0.3);
-color:#fff;
-font-size:16px;
-padding:3px 15px;
-text-shadow:-1px -1px 0 rgba(0,0,0,.3);
-}
 
 .monitor .close {
 background-image:url(i/remove.png);
