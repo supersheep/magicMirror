@@ -114,6 +114,10 @@ YUI.add('monitorPannel',function(Y){
 			settingPannel = new Y.Setting(setting);
 			
 			settingPannel.renderUI(binner);
+			settingPannel.on('cancel',function(){
+				card.removeClass('set');
+				self.isSetting = false;
+			})
 			settingPannel.on('complete',function(setting){
 				self.config.setting = setting;
 				self.desktop.sync();
@@ -123,7 +127,6 @@ YUI.add('monitorPannel',function(Y){
 			});
 		},
 		startFetch:function(){
-			console.trace();
 		    // Define a function to handle the response data.
 		    var pannel = this;
 			var setting = pannel.config.setting;
@@ -194,7 +197,7 @@ YUI.add('monitorPannel',function(Y){
 	    		container = desktop.elem,
 	    		config = self.getConfig(),
 	    		wh = {width:size[0],height:size[1]},
-	    		whinner = {width:size[0]-20,height:size[1]-40},
+	    		whinner = {width:size[0]-20,height:size[1]-50},
 	    		lt = {left:xy[0],top:xy[1]};
 	    	
 			var fface,bface,
@@ -254,7 +257,7 @@ YUI.add('monitorPannel',function(Y){
 	    	
 				resize.on('resize:resize',function(e){
 					var w = e.info.offsetWidth - 20;	
-						h = e.info.offsetHeight - 40;
+						h = e.info.offsetHeight - 50;
 					self.chartinner.setStyles({
 						'width':w ,
 						'height':h

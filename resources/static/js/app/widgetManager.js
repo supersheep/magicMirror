@@ -279,6 +279,9 @@ YUI.add('widgetManager',function(Y){
 			imgholder.empty().append(imgnode);
 		});
 		
+		setting_pannel.on('cancel',function(){
+			self.hide();
+		})
 		self.elem = elem;
 	}
 	

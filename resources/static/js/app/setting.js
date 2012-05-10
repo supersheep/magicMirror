@@ -134,7 +134,8 @@ YUI.add('setting',function(Y){
 				var self = this;
 				var container = wrapper || self.container;
 				var data = self.data;
-				var	complete = self.complete = Y.Node.create('<input type="button" value="好" class="ok" />');
+				var	complete = self.complete = Y.Node.create('<input type="button" value="好" class="btn ok" />');
+				var cancel = self.cancel = Y.Node.create('<input type="button" value="取消" class="btn cancel" />')
 				var row,name,field,unit;
 				
 				if(container){
@@ -156,6 +157,11 @@ YUI.add('setting',function(Y){
 					}
 				}
 				container.append(complete);
+				container.append(cancel);
+				
+				cancel.on('click',function(){
+					self.fire('cancel');
+				})
 				
 				complete.on('click',function(){
 					self.setback();
