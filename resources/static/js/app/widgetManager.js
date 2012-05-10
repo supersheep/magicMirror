@@ -108,6 +108,7 @@ YUI.add('widgetManager',function(Y){
 			inner = this.inner = div('iconpannel_inner').appendTo(iconpannel),
 			icon_list = div('icon_list').appendTo(inner);
 		
+		self._shown = false;
 		for(var i=0;i<ICON_COUNT;i++){
 			var img = dom('img').set('src','/resources/static/img/' + (i+1) + '.png');
 			img.on('click',function(){
@@ -136,6 +137,10 @@ YUI.add('widgetManager',function(Y){
 				opacity:1
 			});
 			
+			this._shown = true;
+		},
+		toggle:function(){
+			this[this._shown?"hide":"show"]();
 		},
 		hide:function(){
 			this.inner.setStyles({
@@ -148,6 +153,7 @@ YUI.add('widgetManager',function(Y){
 				width:0,
 				height:0
 			});
+			this._shown = false;
 		}
 	}
 	
@@ -267,7 +273,7 @@ YUI.add('widgetManager',function(Y){
 		elem.append(settings);
 		
 		imgholder.on('click',function(){
-			icon_pannel.show();
+			icon_pannel.toggle();
 		});
 		
 		icon_pannel.on('selected',function(e){
@@ -294,11 +300,12 @@ YUI.add('widgetManager',function(Y){
 				setting_pannel = self.setting_pannel;
 
 			self.iconsrc = widgetdata.icon;
-			
 			setting_pannel.setData(widgetdata.config);
 			
 			self.imgholder.empty();
 			self.imgholder.append(imgnode);
+			
+			self.icon_pannel.hide();
 			
 			self.iconhint.setStyle('visibility','hidden');
 			setting_pannel.renderUI();
@@ -332,6 +339,8 @@ YUI.add('widgetManager',function(Y){
 			self.iconsrc = "";
 			
 			self.imgholder.empty();
+			
+			self.icon_pannel.hide();
 			
 			self.iconhint.setStyle('visibility','visible');
 			setting_pannel.renderUI();
