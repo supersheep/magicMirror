@@ -5,6 +5,7 @@ YUI.add('monitorFactory',function(Y){
 		var self = this;
 		
 		function add(w){
+			console.log(w);
 			self.add(w.id,{
 				"size":[300,300],
 				"id":w.id,
@@ -39,7 +40,7 @@ YUI.add('monitorFactory',function(Y){
 			
 			new Y.MonitorPannel(
 				axis,
-				Y.merge(config,mod)
+				Y.merge(mod,config)
 			).addToDesktop(desktop);	
 		},
 		add:function(id,mod){
