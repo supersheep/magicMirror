@@ -33,10 +33,10 @@ var TRACK_FORMATTERS = {
 var APP_CONFIG = {
 	debug		: false,
 	fetchItv	: 40,
-	viewUrl		: '/ajax/view.php', // /board/ajax/viewDataAction
-	deskUrl		: '/ajax/desk.php',
-	defineUrl	: '/ajax/define.php',
-	widgetUrl	: '/ajax/widget.php',
+	viewUrl		: '/ajax/view.txt', // /board/ajax/viewDataAction
+	deskUrl		: '/ajax/desk.txt',
+	defineUrl	: '/ajax/define.txt',
+	widgetUrl	: '/ajax/widget.txt',
 	timefield	: 'mirrorDatetime', // mirrorDatetime
 	dataParser	: function(data){
 		var json = JSON.parse(data);
