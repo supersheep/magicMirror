@@ -56,6 +56,7 @@ var APP_CONFIG = {
 	},
 	chartTypes	: {
 		"bar":{
+			"ycount":1,
 			"yaxis":{
 				tickFormatter:FORMATTERS['kilo']
 			},
@@ -67,6 +68,7 @@ var APP_CONFIG = {
 			"mouse" : { track : true }
 		},
 		"line":{
+			"ycount":1,
 			"yaxis":{
 				tickFormatter:FORMATTERS['kilo']
 			},
@@ -76,6 +78,7 @@ var APP_CONFIG = {
 			}
 		},
 		"bubble":{
+			"ycount":2,
 			"bubbles" : { 
 				show : true, 
 				baseRadius : 5 

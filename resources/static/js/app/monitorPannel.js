@@ -21,33 +21,40 @@ YUI.add('monitorPannel',function(Y){
 		var names = config.names.split(',');
 		var xkey = config.xkey;
 		var ykeys = config.ykeys.split(',');
-        
         var alias = json.alias.split(',');
         
         // multi view data
         json.data.forEach(function(dt,i){
-        
+        	var ykey = ykeys[i].split('|');
         	// one view data
+        	
+        	// sort them
         	dt = dt.sort(function(a,b){
         		return a[xkey] - b[xkey];
         	});
-        	        	
-        	var d = dt.map(function(obj){
-			
-				var erroritem;
-				
-				// Error Warning
-	        	if( (obj[xkey]==null||obj[ykeys[i]]==null) && !self.isSetting){
-					
-	        		erroritem = !obj[xkey]?"xkey":("ykeys"+i);
-	        		console.error(erroritem + '字段配置错误，对象信息：',JSON.stringify(obj));
-	        		//self.stopFetch();
-	        	}
         	
-        		return [
-        			obj[xkey],
-        			obj[ykeys[i]]
-        		];
+        	// [{a,b,c},{a,b,c}]…
+        	// translate object to array
+        	var d = dt.map(function(obj){
+				
+				var retarr = [];
+				var erroritem,ykeys;
+				
+	        	try{
+        		
+        			retarr.push(obj[xkey]);
+        		
+        			ykey.forEach(function(key){
+        				retarr.push(obj[key]);
+        			});
+        			
+        		}catch(e){
+        		
+        			parseError();
+        			
+        		}
+        		
+        		return retarr;
         	});
         	
         	data.push({data:d,label:alias[i]});
@@ -58,6 +65,27 @@ YUI.add('monitorPannel',function(Y){
 		
     };
 	
+	function parseError(obj,xkey,ykey){
+		var pair = '';
+		var key = [];
+		var expect = [];
+		
+		if(!obj[xkey]){
+			key.push('xkey');
+			expect.push(xkey);
+		}
+		ykey.forEach(function(k,i){
+			if(!obj[k]){
+				key.push('ykey'+i);
+				expect.push(k);
+			}
+		});
+		
+		key.forEach(function(k,i){
+			pair += (k + ':' + expect[i]);
+		});
+		console.error('字段配置错误：' + pair + '你的对象：' + JSON.stringify(obj));
+	}
 	
 	// should have event to rerender
 
@@ -328,9 +356,9 @@ YUI.add('monitorPannel',function(Y){
 			// pie
 			if(type === "pie"){
 				data = data.map(function(d){
-					var lastavg = d.data.slice(-3);
-					for(var i=0,sum=0,l=lastavg.length;i<l;i++){
-						sum += lastavg[i][1];
+					var all_data = d.data;
+					for(var i=0,sum=0,l=all_data.length;i<l;i++){
+						sum += all_data[i][1];
 					}
 					return {data:[[0,sum/l]],label:d.label};
 				});
@@ -340,7 +368,14 @@ YUI.add('monitorPannel',function(Y){
 				
 			}
 			
-			
+			data.forEach(function(d){
+				var expected = chart.ycount,
+					given = d.data[0].length -1;
+					
+				if(given < expected){
+					console.error(type + " y字段不足，需要" + expected + '，给了' + given,d);
+				}
+			});
 			
 			Flotr.draw(self.chartinner.getDOMNode(), data,chart);
 		},
