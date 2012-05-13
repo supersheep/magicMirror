@@ -461,7 +461,7 @@ color:#444;
 font-family:Arial;
 font-size:12px;
 font-weight:700;
-margin-top:10px;
+margin-top: 5px;
 text-align:center;
 text-shadow:0 1px 0 #eee;
 }
@@ -495,6 +495,7 @@ position:absolute;
 }
 
 .monitor .card {
+position:absolute;
 -webkit-perspective:500;
 -moz-perspective:500px;
 -webkit-transition:all .75s;
@@ -548,11 +549,11 @@ top:0;
 }
 
 .monitor .fface .chart-inner {
-margin:0 10px 15px 5px;
+margin:0 15px 15px 5px;
 }
 
 .monitor .bface .binner {
-margin:26px 0 15px 20px;
+margin: 26px 0 24px 20px;
 }
 
 .monitor .bface .setting-row {
@@ -622,6 +623,14 @@ width:16px;
 
 .monitor .yui3-resize-handle-tr,.monitor .yui3-resize-handle-tl,.monitor .yui3-resize-handle-bl,.monitor .yui3-resize-handle-b,.monitor .yui3-resize-handle-t,.monitor .yui3-resize-handle-l,.monitor .yui3-resize-handle-r {
 display:none;
+}
+
+.yui3-skin-sam .yui3-calendar-day, .yui3-skin-sam .yui3-calendar-prevmonth-day, .yui3-skin-sam .yui3-calendar-nextmonth-day{
+font-size:12px;padding:0;
+}
+
+.yui3-skin-sam .yui3-calendar-weekday {
+font-size: 12px;
 }
 
 .monitor .set .fface .chart,.monitor .set .fface .setting {

@@ -2,14 +2,14 @@ YUI.add('timepicker',function(Y){
 
     var dtdate = Y.DataType.Date;
 	
-	function TimePicker(wrapper){
+	function TimePicker(wrap){
 		log('init:TimePicker');
 		var self = this;
-		var overlay =this.overlay = new Y.Overlay({
+		var overlay = this.overlay = new Y.Overlay({
 			contentBox:Y.Node.create('<div />').addClass('yui3-skin-sam'),
 	        visible: false,
 	        tabIndex: null
-	    }).render(wrapper);
+	    }).render(wrap);
 		
 		var calendar = this.calendar = new Y.Calendar({
 			height:'245px',
@@ -25,8 +25,11 @@ YUI.add('timepicker',function(Y){
 		});
 		
 		calendar.on('selectionChange',function(ev){
-		    var date = ev.newSelection[0];
-		    var datestr = dtdate.format(date);
+		    var date = new Date(ev.newSelection[0]);
+		    var datestr;
+		    
+		    date.setHours(0);
+		    datestr = dtdate.format(date,{format:"%x %l:%M:%S"});
 		    self.fire('selection',{date:date,datestr:datestr});
 		});	
 		//console.log();
@@ -51,7 +54,7 @@ YUI.add('timepicker',function(Y){
 			log('show',this);
 			var el;
 			if(this.shown){
-				this.overlay.destroy();
+				this.overlay.hide();
 				this.shown = false;
 			}
 		}

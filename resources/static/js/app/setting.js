@@ -5,6 +5,7 @@
 
 
 YUI.add('setting',function(Y){
+	var timepicker;
 	var NUM_REG = /^\d+(\.?\d+)?$/;
 	var CLS_ROW = 'setting-row';
 	var CLS_NAME = 'setting-name';
@@ -72,10 +73,35 @@ YUI.add('setting',function(Y){
 			return Y.Node.create('<input />');
 		},
 		'start':function(){
-			return Y.Node.create('<input />').set('type','datetime');
+			var node = Y.Node.create('<input />').set('type','datetime');
+			node.on('click',function(e){
+				e.stopPropagation();
+				timepicker.show();
+				timepicker.overlay.align(node, [Y.WidgetPositionAlign.TL, Y.WidgetPositionAlign.BL]);
+				
+				timepicker.on('selection',function(e){
+					timepicker.hide();
+					node.set('value',e.datestr);	
+				});	
+
+			});		
+			return node;
 		},
 		'end':function(){
-			return Y.Node.create('<input />').set('type','datetime');
+			var node = Y.Node.create('<input />').set('type','datetime');
+			node.on('click',function(e){
+				e.stopPropagation();
+				timepicker.show();
+				timepicker.overlay.align(node, [Y.WidgetPositionAlign.TL, Y.WidgetPositionAlign.BL]);
+				
+				timepicker.detach();
+				timepicker.on('selection',function(e){
+					timepicker.hide();
+					node.set('value',e.datestr);	
+				});	
+			});
+			
+			return node;
 		},
 		'freq':function(){
 			return Y.Node.create('<input placeholder="单位秒" />').setStyle('width',50);
@@ -135,7 +161,8 @@ YUI.add('setting',function(Y){
 				var container = wrapper || self.container;
 				var data = self.data;
 				var	complete = self.complete = Y.Node.create('<input type="button" value="好" class="btn ok" />');
-				var cancel = self.cancel = Y.Node.create('<input type="button" value="取消" class="btn cancel" />')
+				var cancel = self.cancel = Y.Node.create('<input type="button" value="取消" class="btn cancel" />');
+				var time_wrap = Y.Node.create('<div />');
 				var row,name,field,unit;
 				
 				if(container){
@@ -158,6 +185,9 @@ YUI.add('setting',function(Y){
 				}
 				container.append(complete);
 				container.append(cancel);
+				container.append(time_wrap);
+				
+				timepicker = new Y.TimePicker(time_wrap);
 				
 				cancel.on('click',function(){
 					self.fire('cancel');

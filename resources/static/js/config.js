@@ -32,7 +32,7 @@ var TRACK_FORMATTERS = {
 
 var APP_CONFIG = {
 	debug		: false,
-	fetchItv	: 40,
+	fetchItv	: 3,
 	viewUrl		: '/ajax/view.txt', // /board/ajax/viewDataAction
 	deskUrl		: '/ajax/desk.txt',
 	defineUrl	: '/ajax/define.txt',
@@ -86,6 +86,16 @@ var APP_CONFIG = {
 			"pie" : {
 		    	show : true, 
 		    	explode : 6
+		    },
+			xaxis : { showLabels : false },
+			yaxis : { showLabels : false },
+		    grid : {
+    			verticalLines : false,
+      			horizontalLines : false
+    		},
+    		legend : {
+			    position : 'se',
+		    	backgroundColor : '#D2E8FF'
 		    },
 		    "mouse" : { track : true }
 		}

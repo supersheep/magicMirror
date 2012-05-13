@@ -40,7 +40,7 @@ YUI.add('monitorPannel',function(Y){
 	        	if( (obj[xkey]==null||obj[ykeys[i]]==null) && !self.isSetting){
 					
 	        		erroritem = !obj[xkey]?"xkey":("ykeys"+i);
-	        		console.error(erroritem + '字段配置错误\r\n' + '对象信息：',JSON.stringify(obj));
+	        		console.error(erroritem + '字段配置错误，对象信息：',JSON.stringify(obj));
 	        		//self.stopFetch();
 	        	}
         	
@@ -53,11 +53,9 @@ YUI.add('monitorPannel',function(Y){
         	data.push({data:d,label:alias[i]});
         });
         
-        try{
-			self.fire('data',data);
-		}catch(e){
-			console.log('fetch error occured ' + self.clock,self.elem,self.guid);
-		}
+        
+		self.fire('data',data);
+		
     };
 	
 	
@@ -312,17 +310,37 @@ YUI.add('monitorPannel',function(Y){
 			log('drawChart',this);
 			//return false;
 			var self = this,
+				type = self.config.setting.type,
 				config = self.getConfig();
 			
 			data = self.data = data || self.data || [];	
 
-			chart = APP_CONFIG['chartTypes'][self.config.setting.type];
-			if(config.xkey == APP_CONFIG["timefield"]){
+			chart = APP_CONFIG['chartTypes'][type];
+			
+			// is time
+			if(config.xkey == APP_CONFIG["timefield"] && type!=="pie"){
 				chart = Y.merge(chart,{xaxis:{
 					"mode":"time",
 					"timeMode":"local"
 				}});
 			};
+			
+			// pie
+			if(type === "pie"){
+				data = data.map(function(d){
+					var lastavg = d.data.slice(-3);
+					for(var i=0,sum=0,l=lastavg.length;i<l;i++){
+						sum += lastavg[i][1];
+					}
+					return {data:[[0,sum/l]],label:d.label};
+				});
+				
+					
+				chart.HtmlText = false;
+				
+			}
+			
+			
 			
 			Flotr.draw(self.chartinner.getDOMNode(), data,chart);
 		},
