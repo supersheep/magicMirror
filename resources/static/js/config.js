@@ -77,6 +77,11 @@ var APP_CONFIG = {
 				trackFormatter:TRACK_FORMATTERS['time']
 			}
 		},
+		"candle":{
+			"ycount":4,
+		    "candles" : { show : true, candleWidth : 0.6 },
+		    "xaxis"   : { noTicks : 10 }
+		},
 		"bubble":{
 			"ycount":2,
 			"bubbles" : { 

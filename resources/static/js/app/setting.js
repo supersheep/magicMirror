@@ -12,7 +12,7 @@ YUI.add('setting',function(Y){
 	var CLS_FIELD = 'setting-field';
 	var CLS_UNIT = 'setting-unit';
 	var steps = ['year','month','day','hour','minute'];
-	var types = ['bar','line','pie','bubble'];
+	var types = ['bar','line','pie','bubble','candle'];
 	var valueTextMap = {
 		'year':'年',
 		'title':'标题',
@@ -30,6 +30,7 @@ YUI.add('setting',function(Y){
 		'type':'图表类型',
 		'active':'实时',
 		"bubble":'气泡图',
+		"candle":'蜡烛图',
 		'bar':'柱状图',
 		'line':'线图',
 		'pie':'饼图'
