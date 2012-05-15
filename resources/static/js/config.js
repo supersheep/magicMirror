@@ -32,7 +32,7 @@ var TRACK_FORMATTERS = {
 
 var APP_CONFIG = {
 	debug		: false,
-	fetchItv	: 3,
+	fetchItv	: 3000,
 	viewUrl		: '/ajax/view.txt', // /board/ajax/viewDataAction
 	deskUrl		: '/ajax/desk.txt',
 	defineUrl	: '/ajax/define.txt',
@@ -73,7 +73,8 @@ var APP_CONFIG = {
 				tickFormatter:FORMATTERS['kilo']
 			},
 			"mouse" : { 
-				track : true,
+				track:true,
+				trackAll:true,
 				trackFormatter:TRACK_FORMATTERS['time']
 			}
 		},

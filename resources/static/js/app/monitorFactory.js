@@ -5,7 +5,6 @@ YUI.add('monitorFactory',function(Y){
 		var self = this;
 		
 		function add(w){
-			console.log(w);
 			self.add(w.id,{
 				"size":[300,300],
 				"id":w.id,

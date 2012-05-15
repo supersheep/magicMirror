@@ -338,16 +338,21 @@ YUI.add('monitorPannel',function(Y){
 			log('drawChart',this);
 			//return false;
 			var self = this,
+				chart = APP_CONFIG['chartTypes'][type],
+				subchart = APP_CONFIG['chartTypes']["bar"],
 				type = self.config.setting.type,
 				config = self.getConfig();
 			
 			data = self.data = data || self.data || [];	
-
-			chart = APP_CONFIG['chartTypes'][type];
 			
 			// is time
 			if(config.xkey == APP_CONFIG["timefield"] && type!=="pie"){
 				chart = Y.merge(chart,{xaxis:{
+					"mode":"time",
+					"timeMode":"local"
+				}});
+				
+				subchart = Y.merge(subchart,{xaxis:{
 					"mode":"time",
 					"timeMode":"local"
 				}});
@@ -365,8 +370,8 @@ YUI.add('monitorPannel',function(Y){
 				
 					
 				chart.HtmlText = false;
-				
 			}
+			
 			
 			data.forEach(function(d){
 				var expected = chart.ycount,
@@ -377,7 +382,47 @@ YUI.add('monitorPannel',function(Y){
 				}
 			});
 			
-			Flotr.draw(self.chartinner.getDOMNode(), data,chart);
+			
+			if(true){
+				(function(){
+					var wrap = self.chartinner;
+					var main = Y.Node.create('<div />').setStyle('height',"80%");
+					var sub = Y.Node.create('<div />').setStyle('height',"20%");
+					wrap.empty();
+					main.appendTo(wrap);
+					sub.appendTo(wrap);
+					
+					Flotr.draw(main.getDOMNode(), data,Y.merge(chart,{
+    					xaxis : { 
+    						showLabels : false,
+    						margin:false
+    					},
+    					grid:{
+						    outline : 'new',
+				        	verticalLines : false,
+				        	horizontalLines:false
+					    }
+    				}));
+    				
+    				
+    				
+					Flotr.draw(sub.getDOMNode(), data.map(function(d){
+						return d.data;
+					}),Y.merge(subchart,{
+						yaxis : { 
+							showLabels: false
+						},
+				        grid : {
+				        	outline:'ews',
+				        	verticalLines : false,
+				        	horizontalLines:false
+				        }
+					}));
+				})()
+			}else{
+				Flotr.draw(self.chartinner.getDOMNode(), data,chart);
+			}
+			
 		},
 		destroy:function(){
 			log('destroy',this);
