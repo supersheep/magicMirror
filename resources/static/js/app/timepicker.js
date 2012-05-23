@@ -45,6 +45,7 @@ YUI.add('timepicker',function(Y){
 			log('show',this);
 			var el;
 			if(!this.shown){
+				this.overlay.get('contentBox').setStyle('display','block');
 				this.overlay.show();
 				this.shown = true;
 			}
@@ -54,6 +55,7 @@ YUI.add('timepicker',function(Y){
 			log('show',this);
 			var el;
 			if(this.shown){
+				this.overlay.get('contentBox').setStyle('display','none');
 				this.overlay.hide();
 				this.shown = false;
 			}

@@ -552,6 +552,18 @@ top:0;
 margin:0 15px 15px 5px;
 }
 
+.monitor .fface .chart-inner .magic-chart-split-main{
+	border:1px solid #b6d9ff;
+	border-radius:5px 5px 0 0;
+}
+
+.monitor .fface .chart-inner .magic-chart-split-sub{
+	border:1px solid #b6d9ff;
+	border-top:0;
+	border-radius:0 0 5px 5px;
+}
+
+
 .monitor .bface .binner {
 margin: 26px 0 24px 20px;
 }

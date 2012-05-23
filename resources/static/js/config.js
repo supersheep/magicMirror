@@ -64,18 +64,21 @@ var APP_CONFIG = {
 	    		show : true,
 	    		shadowSize : 0,
 	    		barWidth : 0.5
-			},
-			"mouse" : { track : true }
+			}
 		},
 		"line":{
 			"ycount":1,
 			"yaxis":{
 				tickFormatter:FORMATTERS['kilo']
+			}
+		},
+		"area":{
+		"ycount":1,
+			"lines":{
+				"lineWidth":1
 			},
-			"mouse" : { 
-				track:true,
-				trackAll:true,
-				trackFormatter:TRACK_FORMATTERS['time']
+			"yaxis":{
+				tickFormatter:FORMATTERS['kilo']
 			}
 		},
 		"candle":{
@@ -88,25 +91,23 @@ var APP_CONFIG = {
 			"bubbles" : { 
 				show : true, 
 				baseRadius : 5 
-			},
-			"mouse" : { track : true }
+			}
 		},
 		"pie":{
 			"pie" : {
 		    	show : true, 
 		    	explode : 6
 		    },
-			xaxis : { showLabels : false },
-			yaxis : { showLabels : false },
-		    grid : {
+			"xaxis" : { showLabels : false },
+			"yaxis" : { showLabels : false },
+		    "grid" : {
     			verticalLines : false,
       			horizontalLines : false
     		},
-    		legend : {
+    		"legend" : {
 			    position : 'se',
 		    	backgroundColor : '#D2E8FF'
-		    },
-		    "mouse" : { track : true }
+		    }
 		}
 	}
 };

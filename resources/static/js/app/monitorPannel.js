@@ -197,8 +197,8 @@ YUI.add('monitorPannel',function(Y){
 				
 				ret.push("viewName="+config["names"]);
 				ret.push("xField="+config["xkey"]);
-				ret.push("fromDate"+setting["start"]);
-				ret.push("toDate"+setting["end"]);
+				ret.push("fromDate="+setting["start"]);
+				ret.push("toDate="+setting["end"]);
 				
 				return "?" + ret.join("&");
 			}
@@ -334,31 +334,75 @@ YUI.add('monitorPannel',function(Y){
 	    getConfig:function(){
 	    	return widgetManager.getConfig(this.config.id);
 	    },
-		drawChart:function(data){	
+		drawChart:function(dt){	
 			log('drawChart',this);
 			//return false;
 			var self = this,
+				type = self.config.setting.type,
 				chart = APP_CONFIG['chartTypes'][type],
 				subchart = APP_CONFIG['chartTypes']["bar"],
-				type = self.config.setting.type,
-				config = self.getConfig();
+				config = self.getConfig(),
+				data = self.data = dt || self.data || [],
+				puredata = data.map(function(d){return d.data}),
+				split = type!='pie';
 			
-			data = self.data = data || self.data || [];	
+			// 时间轴配置
+			var timeconfig = {
+					xaxis:{
+						mode:"time",
+						timeMode:"local"
+					}
+				},
 			
-			// is time
-			if(config.xkey == APP_CONFIG["timefield"] && type!=="pie"){
-				chart = Y.merge(chart,{xaxis:{
-					"mode":"time",
-					"timeMode":"local"
-				}});
+			//	主视图配置		
+				mainconfig = {
+					xaxis : { 
+						showLabels : false,
+						margin:false
+					},
+					shadowSize: false,
+					yaxis:{	
+						margin:false,
+						"showLabels" : true,						
+						"autoscale" : true,
+						"noTicks" : 4,
+						"autoscaleMargin" : 0.05
+					},
+					grid:{
+						outlineWidth : 0,
+						verticalLines : false,
+						horizontalLines:false
+					},					
+					mouse : { 
+						track:true,
+						trackAll:true,
+						trackFormatter:TRACK_FORMATTERS['time']
+					}
+				},
 				
-				subchart = Y.merge(subchart,{xaxis:{
-					"mode":"time",
-					"timeMode":"local"
-				}});
-			};
+			//	子视图配置
+
+				subconfig = {
+					yaxis : { 						
+						noTicks : 4,
+						margin: false,
+						showLabels: false,						
+						autoscale : true,
+						autoscaleMargin : 0.05,
+					},
+					bars:{				
+						show : true,		
+						barWidth : 15
+					},
+					grid : {
+						outlineWidth : 0,
+						verticalLines : false,
+						horizontalLines:false
+					}
+				}
 			
-			// pie
+			
+			// 饼图不区分视图
 			if(type === "pie"){
 				data = data.map(function(d){
 					var all_data = d.data;
@@ -366,58 +410,79 @@ YUI.add('monitorPannel',function(Y){
 						sum += all_data[i][1];
 					}
 					return {data:[[0,sum/l]],label:d.label};
-				});
-				
-					
+				});					
 				chart.HtmlText = false;
 			}
 			
 			
+			// x轴为时间
+			if(config.xkey == APP_CONFIG["timefield"] && type!=="pie"){
+				chart = Y.merge(chart,timeconfig);				
+				subchart = Y.merge(subchart,timeconfig);
+			};
+						
+			
+			// 验证y字段长度
 			data.forEach(function(d){
 				var expected = chart.ycount,
-					given = d.data[0].length -1;
-					
-				if(given < expected){
-					console.error(type + " y字段不足，需要" + expected + '，给了' + given,d);
+					given;
+				if(d.data.length){
+					given = d.data[0].length -1;					
+					if(given < expected){
+						console.error(type + " y字段不足，需要" + expected + '，给了' + given,d);
+					}
 				}
 			});
 			
 			
-			if(true){
+			if(split){
 				(function(){
 					var wrap = self.chartinner;
-					var main = Y.Node.create('<div />').setStyle('height',"80%");
-					var sub = Y.Node.create('<div />').setStyle('height',"20%");
+					var main = Y.Node.create('<div class="magic-chart-split-main" />').setStyle('height',"80%");
+					var sub = Y.Node.create('<div class="magic-chart-split-sub" />').setStyle('height',"20%");
+					var mainEl = main.getDOMNode();
+					var subEl = sub.getDOMNode();
+					var mainChart,subChart;
 					wrap.empty();
 					main.appendTo(wrap);
 					sub.appendTo(wrap);
 					
-					Flotr.draw(main.getDOMNode(), data,Y.merge(chart,{
-    					xaxis : { 
-    						showLabels : false,
-    						margin:false
-    					},
-    					grid:{
-						    outline : 'new',
-				        	verticalLines : false,
-				        	horizontalLines:false
-					    }
-    				}));
-    				
-    				
-    				
-					Flotr.draw(sub.getDOMNode(), data.map(function(d){
-						return d.data;
-					}),Y.merge(subchart,{
-						yaxis : { 
-							showLabels: false
-						},
-				        grid : {
-				        	outline:'ews',
-				        	verticalLines : false,
-				        	horizontalLines:false
-				        }
-					}));
+					
+					mainChart = Flotr.draw(mainEl, data,Y.merge(chart,mainconfig));
+					subChart = Flotr.draw(subEl, puredata,Y.merge(chart,subconfig));
+					
+					// 同步视图
+					Flotr.EventAdapter.observe(mainEl, 'flotr:hit', function (e) {
+						doHit(subChart, e, this);
+					});
+					
+					
+					Flotr.EventAdapter.observe(subEl, 'flotr:hit', function (e) {
+						doHit(mainChart, e, this);
+					});
+
+					function doHit(graph, e, container) {
+						graph.hit.clearHit();
+						
+						var n = Flotr.clone(e);
+						var xaxis = graph.axes.x;
+						var yaxis = graph.axes.y;
+						var s = graph.series[0]; 
+						var index = n.index;
+						var point = s.data[index];
+						
+						n.xaxis = xaxis;
+						n.yaxis = yaxis;
+						n.x = point[0];
+						n.y = point[1];
+						
+						graph.hit.drawMouseTrack(n);
+						graph.hit.drawHit(n);
+
+				  }
+
+					
+					
 				})()
 			}else{
 				Flotr.draw(self.chartinner.getDOMNode(), data,chart);
