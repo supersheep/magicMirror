@@ -2,5 +2,6 @@ resources/static/js/yui3/
 resources/static/js/flotr2/
 test/
 .svn/
+lib/
 *.swp
 .DS_Store
