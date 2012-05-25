@@ -17,7 +17,6 @@ YUI.add('monitorPannel', function (Y) {
 		var config = self.getConfig(),
 			json = APP_CONFIG.dataParser(o.responseText),
 			data = [],
-			names = config.names.split(','),
 			xkey = config.xkey,
 			ykeys = config.ykeys.split(','),
 			alias = json.alias.split(',');
@@ -37,9 +36,7 @@ YUI.add('monitorPannel', function (Y) {
 			// translate object to array
 			d = dt.map(function (obj) {
 					
-					var retarr = [],
-						erroritem,
-						ykeys;
+					var retarr = [];
 					
 					try {
 						
@@ -247,8 +244,7 @@ YUI.add('monitorPannel', function (Y) {
 			elem,
 			chartinner,
 			titlebar,
-			binner,
-			setting;
+			binner;
 			
 			this.chart = div('chart');
 			this.chartinner = div('chart-inner').setStyles(whinner);
@@ -291,7 +287,6 @@ YUI.add('monitorPannel', function (Y) {
 			desktop = this.desktop,
 			close = this.close,
 			setbtn = this.setbtn,
-			resize,
 			drag;
 			
 			YUI().use('resize', function (Y) {
@@ -338,11 +333,11 @@ YUI.add('monitorPannel', function (Y) {
 				desktop.sync();
 			});
 			
-			self.close.on('click', function () {
+			close.on('click', function () {
 				self.destroy();
 				self.desktop.sync();
 			});
-			self.setbtn.on('click', function () {
+			setbtn.on('click', function () {
 				self.setting();
 			});
 			self.on('data', function (data) {

@@ -33,7 +33,8 @@ YUI.add('setting',function(Y){
 		"candle":'蜡烛图',
 		'bar':'柱状图',
 		'line':'线图',
-		'pie':'饼图'
+		'pie':'饼图',
+		'cate':'分类',
 	};
 	
 	var valueConverter = {
@@ -68,6 +69,9 @@ YUI.add('setting',function(Y){
 			return Y.Node.create('<input />');
 		},
 		'ykeys':function(){
+			return Y.Node.create('<input />');
+		},
+		'cate':function(){
 			return Y.Node.create('<input />');
 		},
 		'names':function(){
@@ -145,7 +149,7 @@ YUI.add('setting',function(Y){
 	function Setting(data,container){
 		log('init',this);
 		var self = this;
-		self.data = data;
+		self.data = data || {};
 		self.container = container;
 		self.controlMap = {};
 		self.valueMap = {};
@@ -154,7 +158,12 @@ YUI.add('setting',function(Y){
 	Setting.prototype = {
 			constructor : Setting,
 			setData:function(data){
-				this.data = data;
+				for(var key in data){
+					this.addData(key,data[key]);
+				}
+			},
+			addData:function(key,data){
+				this.data[key] = data;
 			},
 			renderUI:function(wrapper){
 				log('renderUI',this);

@@ -25,33 +25,468 @@
 	
 	<script type="text/javascript">
 		var widgetsData = [{
-			"config":{
-				"title":"Line!",
-				"names":"line",
-				"xkey":"mirrorDatetime",
-				"ykeys":"cn,cn"
-			},
-			"id":1,
-			"icon":"/resources/static/img/1.png"
-		},{
-			"config":{
-				"title":"Line@",
-				"names":"bar",
-				"xkey":"mirrorDatetime",
-				"ykeys":"cn,cn"
-			},
-			"id":2,
-			"icon":"/resources/static/img/2.png"
-		},{
-			"config":{
-				"title":"Line#",
-				"names":"pie",
-				"xkey":"mirrorDatetime",
-				"ykeys":"cn,cn"
-			},
-			"id":3,
-			"icon":"/resources/static/img/3.png"
-		}];
+				"id" : "4fab5ff7e4b0f971d673f720",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "OpenAPI",
+					"names" : "OpenLog_View02,OpenLog_View03,OpenLog_View04,OpenLog_View07",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn,cn,cn,cn"
+				},
+				"cate":"a",
+				"title" : "OpenAPI",
+				"icon" : "/resources/static/img/1.png"
+			}, {
+				"id" : "4fa796dde4b05ec013d0f643",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "登录统计",
+					"names" : "AccountLog_View01,LoginFailed_View01",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn,cn"
+				},
+				"cate":"a",
+				"title" : "登录统计",
+				"icon" : "/resources/static/img/2.png"
+			}, {
+				"id" : "4fa7972fe4b05ec013d0f645",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "团购订单数",
+					"names" : "tuangou_view01",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"a",
+				"title" : "团购订单数",
+				"icon" : "/resources/static/img/5.png"
+			}, {
+				"id" : "4fa79a53e4b05ec013d0f6e4",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "支付成功比例",
+					"names" : "tuangou_view03",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"b",
+				"title" : "支付成功比例",
+				"icon" : "/resources/static/img/3.png"
+			}, {
+				"id" : "4fa79b37e4b05ec013d0f6e9",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "未支付比例",
+					"names" : "tuangou_view06",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"a",
+				"title" : "未支付比例",
+				"icon" : "/resources/static/img/3.png"
+			}, {
+				"id" : "4fa79b73e4b05ec013d0f6eb",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "第三方推送",
+					"names" : "tuangou_view03",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"b",
+				"title" : "第三方推送",
+				"icon" : "/resources/static/img/3.png"
+			}, {
+				"id" : "4fa79bc8e4b05ec013d0f6ee",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "生成券数",
+					"names" : "tuangou_view04",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"b",
+				"title" : "生成券数",
+				"icon" : "/resources/static/img/3.png"
+			}, {
+				"id" : "4fa7a538e4b05ec013d0f7c3",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "新增帖子数",
+					"names" : "add_note",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"title" : "新增帖子数",
+				"icon" : "/resources/static/img/5.png"
+			}, {
+				"id" : "4fa7a54be4b05ec013d0f7c4",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "新增回帖数",
+					"names" : "fellownote_view",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"b",
+				"title" : "新增回帖数",
+				"icon" : "/resources/static/img/5.png"
+			}, {
+				"id" : "4fa7a59fe4b05ec013d0f7c6",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "新增活动数",
+					"names" : "group_view01",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"c",
+				"title" : "新增活动数",
+				"icon" : "/resources/static/img/5.png"
+			}, {
+				"id" : "4fa7a5e7e4b05ec013d0f7c8",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "活跃会员数",
+					"names" : "group_view03",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"c",
+				"title" : "活跃会员数",
+				"icon" : "/resources/static/img/5.png"
+			}, {
+				"id" : "4fa7a703e4b05ec013d0f7d2",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "短信发送情况",
+					"names" : "sms_view_all,sms_view_success",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn,cn"
+				},
+				"cate":"d",
+				"title" : "短信发送情况",
+				"icon" : "/resources/static/img/4.png"
+			}, {
+				"id" : "4fa88b78e4b095aab174bcb9",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "徽章",
+					"names" : "badge_view01",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"title" : "徽章",
+				"icon" : "/resources/static/img/5.png"
+			}, {
+				"id" : "4fa8dc9de4b088cb936f4a3b",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "添加点评数",
+					"names" : "comment_add_view",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"title" : "添加点评数",
+				"icon" : "/resources/static/img/1.png"
+			}, {
+				"id" : "4fa8ebc8e4b088cb936f50dd",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "注册用户总数",
+					"names" : "account_add_view_all",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"c",
+				"title" : "注册用户总数",
+				"icon" : "/resources/static/img/4.png"
+			}, {
+				"id" : "4fa8ed66e4b088cb936f5252",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "注册用户详情",
+					"names" : "account_add_view_dp,account_add_view_tg,account_add_view_mb,account_add_view_wap",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn,cn,cn,cn"
+				},
+				"title" : "注册用户详情",
+				"icon" : "/resources/static/img/4.png"
+			}, {
+				"id" : "4fa9d7f1e4b00b8fc5acf5ca",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "添加点评耗时",
+					"names" : "comment_addelapsed_view",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"e",
+				"title" : "添加点评耗时",
+				"icon" : "/resources/static/img/1.png"
+			}, {
+				"id" : "4fa9fdf8e4b0441f1be201fe",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "添加点评失败数",
+					"names" : "comment_fail_view",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"title" : "添加点评失败数",
+				"icon" : "/resources/static/img/1.png"
+			}, {
+				"id" : "4fa9fe2ae4b0441f1be20206",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "修改点评数",
+					"names" : "comment_update_view",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"d",
+				"title" : "修改点评数",
+				"icon" : "/resources/static/img/1.png"
+			}, {
+				"id" : "4fa9fe5be4b0441f1be2020a",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "修改点评耗时",
+					"names" : "comment_update_elapsed",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"title" : "修改点评耗时",
+				"icon" : "/resources/static/img/1.png"
+			}, {
+				"id" : "4fa9fe7ce4b0441f1be2020f",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "修改点评失败数",
+					"names" : "comment_update_fail",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"a",
+				"title" : "修改点评失败数",
+				"icon" : "/resources/static/img/1.png"
+			}, {
+				"id" : "4fa9fea3e4b0441f1be20216",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "签到耗时数",
+					"names" : "checkIn_elapsed_view",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"a",
+				"title" : "签到耗时数",
+				"icon" : "/resources/static/img/1.png"
+			}, {
+				"id" : "4fa9febde4b0441f1be20219",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "签到异常数",
+					"names" : "checkIn_error_view",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"e",
+				"title" : "签到异常数",
+				"icon" : "/resources/static/img/1.png"
+			}, {
+				"id" : "4fa9fedbe4b0441f1be2021f",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "相册耗时数",
+					"names" : "album_elapsed_view",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"e",
+				"title" : "相册耗时数",
+				"icon" : "/resources/static/img/1.png"
+			}, {
+				"id" : "4fa9fef7e4b0441f1be20221",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "相册异常数",
+					"names" : "album_error_view",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"d",
+				"title" : "相册异常数",
+				"icon" : "/resources/static/img/1.png"
+			}, {
+				"id" : "4fa9ff13e4b0441f1be20225",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "会员卡耗时数",
+					"names" : "card_elapsed_view",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"b",
+				"title" : "会员卡耗时数",
+				"icon" : "/resources/static/img/1.png"
+			}, {
+				"id" : "4facaa93e4b0d54adf425fd8",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "sds",
+					"names" : "dsd",
+					"xkey" : "",
+					"ykeys" : ""
+				},
+				"cate":"b",
+				"title" : "sds",
+				"icon" : "/resources/static/img/11.png"
+			}, {
+				"id" : "4fb0c163e4b0d54adf44264c",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "",
+					"names" : "",
+					"xkey" : "",
+					"ykeys" : ""
+				},
+				"cate":"b",
+				"title" : "",
+				"icon" : ""
+			}, {
+				"id" : "4fa9ff2fe4b0441f1be20229",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "会员卡异常数",
+					"names" : "card_error_view",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"c",
+				"title" : "会员卡异常数",
+				"icon" : "/resources/static/img/1.png"
+			}, {
+				"id" : "4faa1523e4b0441f1be202d2",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "添加商户图片数",
+					"names" : "shop_pics_add",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"d",
+				"title" : "添加商户图片数",
+				"icon" : "/resources/static/img/2.png"
+			}, {
+				"id" : "4faa1540e4b0441f1be202d4",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "删除商户图片数",
+					"names" : "shop_pics_delete",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"e",
+				"title" : "删除商户图片数",
+				"icon" : "/resources/static/img/2.png"
+			}, {
+				"id" : "4faa1630e4b0441f1be202df",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "添加图片失败",
+					"names" : "pic_add_failed",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"d",
+				"title" : "添加图片失败",
+				"icon" : "/resources/static/img/2.png"
+			}, {
+				"id" : "4faa1b1de4b0441f1be2031e",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "图片资源上传",
+					"names" : "pic_add,normalpic_upload",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn,cn"
+				},
+				"cate":"e",
+				"title" : "图片资源上传",
+				"icon" : "/resources/static/img/2.png"
+			}, {
+				"id" : "4faa3616e4b0971669ce6246",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "图片资源删除数",
+					"names" : "picresourcedelcount",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn"
+				},
+				"cate":"b",
+				"title" : "图片资源删除数",
+				"icon" : "/resources/static/img/2.png"
+			}, {
+				"id" : "4fab5779e4b0c594fbe9500f",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "邮件发送情况",
+					"names" : "mail_view_all,mail_view_success",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn,cn"
+				},
+				"cate":"d",
+				"title" : "邮件发送情况",
+				"icon" : "/resources/static/img/4.png"
+			}, {
+				"id" : "4fab7005e4b0f971d67403d2",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "第三方Feed发送(min)",
+					"names" : "ThirdPartyLog_Sum,ThirdPartyLog_Success_Sum",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn,cn"
+				},
+				"title" : "第三方Feed发送(min)",
+				"icon" : "/resources/static/img/2.png"
+			}, {
+				"id" : "4fac8e8ee4b0d54adf4242b3",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "短信发送情况",
+					"names" : "LL_sms_view_all,LL_sms_view_success",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn,cn"
+				},
+				"cate":"f",
+				"title" : "短信发送情况",
+				"icon" : "/resources/static/img/8.png"
+			}, {
+				"id" : "4faca209e4b0d54adf42583f",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "邮件发送情况",
+					"names" : "LL_mail_view_all,LL_mail_view_success",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn,cn"
+				},
+				"cate":"e",
+				"title" : "邮件发送情况",
+				"icon" : "/resources/static/img/8.png"
+			}, {
+				"id" : "4fab5ff7e4b0f971d673f720",
+				"size" : [300, 300],
+				"config" : {
+					"title" : "Sina-第三方Feed(min)",
+					"names" : "ThirdPartyLog_view01,ThirdPartyLog_sinasuccess_view01",
+					"xkey" : "mirrorDatetime",
+					"ykeys" : "cn,cn"
+				},
+				"cate":"c",
+				"title" : "Sina-第三方Feed(min)",
+				"icon" : "/resources/static/img/2.png"
+			}
+		];
 		
 		var ICON_COUNT = 5;
 		

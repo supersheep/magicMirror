@@ -23,6 +23,7 @@ YUI.add('widgetManager',function(Y){
 				xkey:data.xField,
 				ykeys:data.yField
 			},
+			cate:data.cate,
 			icon:data.imageSource,
 			id:data.id
 		};
@@ -37,6 +38,7 @@ YUI.add('widgetManager',function(Y){
 			"ykeys":"yField",
 			"names":"view",
 			"id":"id",
+			"cate":"cate",
 			"icon":"imageSource"
 		},ret = {};
 		
@@ -204,13 +206,14 @@ YUI.add('widgetManager',function(Y){
 			li = dom('li','clear'),
 			checkbox = dom('input','checkbox').set('type','checkbox'),
 			edit = dom('span','edit').set('innerHTML','编辑'),
-			img = dom('img','icon').set('src',widgetdata.icon),
-			title = dom('span','title').set('innerHTML',widgetdata.config.title);
+			img = dom('img','icon'),
+			title = dom('span','title');
 		
 		li.append(checkbox);
 		li.append(img);
 		li.append(title);
 		li.append(edit);
+		
 		
 		checkbox.on('click',function(e){
 			var checked = e.target.get('checked');
@@ -231,6 +234,8 @@ YUI.add('widgetManager',function(Y){
 		self.title = title;
 		self.checkbox = checkbox;
 		self.data = widgetdata;
+		
+		self.update(widgetdata);
 	}
 	
 	WidgetLi.prototype = {
@@ -239,10 +244,13 @@ YUI.add('widgetManager',function(Y){
 			this.elem.appendTo(node);
 		},
 		update:function(widgetdata){
-			var self = this;
+			var self = this,
+				title = widgetdata.config.title;
+				
 			self.data = widgetdata;
 			self.img.setAttribute('src',widgetdata.icon);
-			self.title.set('innerHTML',widgetdata.config.title);
+			self.title.set('innerHTML',title);
+			self.title.setAttribute('title',title);
 		}
 	}
 	
@@ -296,12 +304,13 @@ YUI.add('widgetManager',function(Y){
 		renderEdit:function(widgetdata){
 			var self = this,
 				id = widgetdata.id,
+				cate = widgetdata.cate,
 				imgnode = dom('img').setAttribute('src',widgetdata.icon);
 				setting_pannel = self.setting_pannel;
 
 			self.iconsrc = widgetdata.icon;
 			setting_pannel.setData(widgetdata.config);
-			
+			setting_pannel.addData('cate',cate);
 			self.imgholder.empty();
 			self.imgholder.append(imgnode);
 			
@@ -334,8 +343,8 @@ YUI.add('widgetManager',function(Y){
 			var self = this,
 				setting_pannel = self.setting_pannel;
 
-			setting_pannel.setData({title:"",names:"",xkey:"",ykeys:""});
-
+			setting_pannel.setData({title:"",names:"",xkey:"",ykeys:"",cate:self.manager.tabs.getCurrent().name});
+			
 			self.iconsrc = "";
 			
 			self.imgholder.empty();
@@ -352,7 +361,7 @@ YUI.add('widgetManager',function(Y){
 				YUI().use('io',function(Y){
 					Y.on('io:success', function(id, o){
 						var data = JSON.parse(o.responseText);
-						self.fire('create',parseData(data));
+						self.fire('create',parseData(data),true); // switchToTab true
 						setTimeout(function(){
 							setting_pannel.empty();
 						},500);
@@ -431,8 +440,135 @@ YUI.add('widgetManager',function(Y){
 			}
 		}
 	}
+	
+	
+	/*
+		Tab
+		- add(Widget)
+	*/
+	function Tab(name){
+		var tabBody = div('tab-body'),
+			bodyUl = dom('ul');
 		
+		
+		tabBody.append(bodyUl);
+		
+		this.name = name;
+		this.head = div('tab-header').set('innerHTML',name);
+		this.body = tabBody;
+		this.widgets = [];
+	}
+	
+	Tab.prototype = {
+		constructor:Tab,
+		add:function(widget_li){
+			this.body.one('ul').append(widget_li.elem);
+			this.widgets.push(widget_li);
+		},
+		remove:function(widget_li){
+			var widgets = this.widgets,
+				ul = this.body.one('ul');
+			ul.removeChild(widget_li.elem);
+			
+			for(var i=0;i<widgets.length;i++){
+				if(widgets[i] == widget_li){
+					widgets.splice(i,1);
+				}
+			}
+		},
+		show:function(){
+			this.head.addClass('active');
+			this.body.addClass('active');
+		},
+		hide:function(){
+			this.head.removeClass('active');
+			this.body.removeClass('active');
+		}
+	}
 
+	
+	/*
+		Tabs
+		- add(Tab)
+		- getTab {return head,body}
+	*/
+	function Tabs(cls){
+		var elem = this.elem = div(cls);
+		var head = this.head = div('header clear');
+		var body = this.body = div('body');
+		
+		elem.append(head);
+		elem.append(body);
+		
+		
+		this.tabs = {};
+	}
+	
+	Tabs.prototype = {
+		constructor:Tabs,
+		moveToTab:function(name,widget_li){
+			var cate = widget_li.data.cate;
+			var from = this.get(cate);
+			var to = this.get(name);
+			
+			from.remove(widget_li);
+			to.add(widget_li);
+			this.switchTo(name);
+		},
+		addToTab:function(name,widget_li){
+			var tab,
+				other_name = '未分类';
+			
+			name = name || other_name;
+			
+			tab = this.get(name);
+			if(!tab){
+				tab = this.add(name);
+			}				
+			tab.add(widget_li);			
+		},
+		switchTo:function(name){
+			var tabs = this.tabs,
+				current = this.current,
+				tab = null,
+				tabname = null;
+			
+			if(name!=current){			
+				tabs[name].show();
+				tabs[current].hide();
+				
+				this.current = name;
+			}
+		},
+		add:function(name){
+			
+			var self = this,
+				tab = new Tab(name);
+				
+			if(Object.keys(this.tabs).length == 0){
+				this.current = name;
+				tab.show();
+			}
+			
+			tab.head.on('click',function(){
+				self.switchTo(name);
+			});
+			
+			this.tabs[name] = tab;
+			
+			this.head.append(tab.head);
+			this.body.append(tab.body);
+			
+			return tab;
+		},
+		getCurrent:function(){
+			return this.tabs[this.current];
+		},
+		get:function(name){
+			return this.tabs[name];
+		}
+	}
+	
 
 	// 初始化widgetPannel
 	/*
@@ -444,18 +580,21 @@ YUI.add('widgetManager',function(Y){
 		- toolbar: Y_Node		bottom tools
 		- ul: Y_Node		list container
 		- wrap: Y_Node		absolute to cover the setting pannel
-	
 	*/
+	
+	
+	
+	
 	function WidgetManager(all_widgets_data,my_widgets_data){
 		log('init',this);
 		var self = this,
 			edit_pannel = new EditPannel(self),
-			ul = dom('ul','list'),
+			tabs = new Tabs('tabs'),
 			wrap = div('widgets'),
 			pannel = div('pannel'),
 			elem = div('widget-manager'),
 			close = div('close'),
-			title = div('title').set('innerHTML','管理Widget…'),
+			title = div('title clear').set('innerHTML','<span class="title_text">管理Widget…</span>'),
 			createbtn = div('create').set('innerHTML','new');
 			
 			
@@ -466,13 +605,12 @@ YUI.add('widgetManager',function(Y){
 		elem.append(wrap);
 			wrap.append(title);
 				title.append(createbtn);
-			wrap.append(ul);
+			wrap.append(tabs.elem);
 		elem.append(edit_pannel.elem);
 		elem.appendTo('body');
 		
 		self.elem = elem;
-		self.ul = ul;
-		self.wrap = wrap;
+		self.tabs = tabs;
 		self.edit_pannel = edit_pannel;
 		self.toolbar = Y.Node.one('.tools');
 		self.all_widgets = new List(WidgetLi); // all data
@@ -481,7 +619,7 @@ YUI.add('widgetManager',function(Y){
 		
 		// add to list
 		all_widgets_data.forEach(function(widget){
-			self.addWidgetToBank(widget);
+			self.addWidgetToBank(widget,false);
 		});
 		
 		// add to botton tool bar
@@ -507,6 +645,8 @@ YUI.add('widgetManager',function(Y){
 			node: elem
 		}).addHandle(title);	
 		
+		self.wrap = wrap;
+		
 		// hide when init
 		self.hide();
 		
@@ -525,7 +665,6 @@ YUI.add('widgetManager',function(Y){
 			return false;
 		},
 		
-		
 		// 展开edit_pannel
 		createWidget:function(){
 			var edit_pannel = this.edit_pannel;
@@ -542,23 +681,34 @@ YUI.add('widgetManager',function(Y){
 		},
 		
 		// edit_pannel完成后的动作
-		updateWidget:function(data){
+		updateWidget:function(widgetdata){
 			var self = this,
 				widget,mywidget,
-				id = data.id; // data
+				cate = widgetdata.cate
+				id = widgetdata.id; // widgetdata
 				
 			widget = self.all_widgets.get(id);
-			widget && widget.update(data);
+			if(widget){				
+				if(cate != widget.data.cate){
+					self.tabs.moveToTab(cate,widget);
+				}
+				widget.update(widgetdata);
+			}
 			mywidget = self.my_widgets.get(id);
-			mywidget && mywidget.update(data);
+			mywidget && mywidget.update(widgetdata);	
+			
 		},
 		
 		
 		// edit_pannel完成后的动作
-		addWidgetToBank:function(widgetdata){
+		addWidgetToBank:function(widgetdata,switchToTab){
 			var self = this,
-				ul = self.ul,
+				tabs = self.tabs,
+				tab = null,
+				tab_other = null,
+				str_other = '其他',
 				id = widgetdata.id,
+				cate = widgetdata.cate,
 				all_widgets = self.all_widgets,
 				widget_li = new WidgetLi(widgetdata,self);
 				
@@ -570,8 +720,8 @@ YUI.add('widgetManager',function(Y){
 			});
 			
 			
-			widget_li.appendTo(ul);
-			
+			tabs.addToTab(cate,widget_li);
+			switchToTab && tabs.switchTo(cate);
 			all_widgets.add(widget_li);
 			
 			// which will be proccessed in monitorFactory;
@@ -625,11 +775,11 @@ YUI.add('widgetManager',function(Y){
 		
 		show : function(){
 			log('show',this);
-			this.elem.setStyle('display','block');
+			this.elem.setStyle('display','none');
 		},
 		hide:function(){
 			log('hide',this);
-			this.elem.setStyle('display','none');	
+			this.elem.setStyle('display','block');	
 		}
 	}
 	

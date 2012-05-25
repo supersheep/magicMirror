@@ -1,2 +1,1 @@
-{"config":{"title":"Linmme!","names":"line","xkey":"time","ykeys":"cn,cn"},"id":"giuyiuf","icon":"/resources/static/img/1.png"}
-	
+{"id":"4fab5ff7e4b0f971d673f720","imageSource":"\/resources\/static\/img\/2.png","mode":"save","name":"Sina-第三方Feed(min)","cate":"b","view":"ThirdPartyLog_view01,ThirdPartyLog_sinasuccess_view01","xField":"mirrorDatetime","yField":"cn,cn"}

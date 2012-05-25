@@ -114,12 +114,8 @@ border-radius: 5px;
 padding-bottom: 30px;
 }
 
-.widget-manager .list {
-max-height:300px;
-overflow:auto;
-}
-
-.widget-manager .list:hover {
+.widget-manager .tabs .body  {
+max-height:250px;
 overflow:auto;
 }
 
@@ -242,33 +238,65 @@ cursor:default;
 padding:8px;
 text-align:center;
 }
+.widget-manager .widgets .title .title_text{
+	float: left;
+	padding-left: 50px;
+	margin-right: 15px;
+}
 
 .widget-manager .widgets .title .create{
 background: url('i/plus.png') no-repeat center center;
 text-indent: -999px;
+float: left;
+width: 25px;
+height: 25px;
 }
 
-.widget-manager .list li {
+.widget-manager .tabs .header .tab-header{
+	float:left;
+	border: 1px solid #ccc;
+	border-bottom: none;
+	border-radius: 5px 5px 0 0;
+	padding: 0 5px;
+	box-shadow: inset 1px 1px 1px 1px  rgba(0,0,0,0.075);
+	font-size: 14px;
+	border-left: none;
+	cursor:pointer;
+}
+
+.widget-manager .tabs .header .active{
+	background:#39d;
+	color:#fff;
+}
+.widget-manager .tabs .body .tab-body{
+	display:none;
+}
+
+.widget-manager .tabs .body .active{
+	display:block;
+}
+
+.widget-manager .tabs .body  li {
 line-height:34px;
 padding: 0 10px;
 }
 
-.widget-manager .list .order {
+.widget-manager .tabs .body  .order {
 background-color:#f5f5f5;
 }
 
-.widget-manager .list .even {
+.widget-manager .tabs .body  .even {
 background-color:#fafafa;
 }
 
-.widget-manager .list .checkbox {
+.widget-manager .tabs .body  .checkbox {
 float:left;
 line-height: 24px;
 margin: 18px 0;
 background-color: transparent;
 }
 
-.widget-manager .list .icon {
+.widget-manager .tabs .body .icon {
 float:left;
 height:34px;
 margin-left:10px;
@@ -276,12 +304,18 @@ width:34px;
 padding: 8px 0;
 }
 
-.widget-manager .list .title {
+.widget-manager .tabs .body  .title {
 float:left;
 margin-left:5px;
+width: 115px;
+text-align: left;
+text-overflow: ellipsis;
+height: 33px;
+overflow: hidden;
+white-space: nowrap;
 }
 
-.widget-manager .list .edit{
+.widget-manager .tabs .body  .edit{
 background: url('i/pencil.png') no-repeat center center;
 float: right;
 line-height: 34px;
@@ -461,7 +495,7 @@ color:#444;
 font-family:Arial;
 font-size:12px;
 font-weight:700;
-margin-top: 5px;
+margin-top:10px;
 text-align:center;
 text-shadow:0 1px 0 #eee;
 }
@@ -495,7 +529,6 @@ position:absolute;
 }
 
 .monitor .card {
-position:absolute;
 -webkit-perspective:500;
 -moz-perspective:500px;
 -webkit-transition:all .75s;
@@ -549,23 +582,11 @@ top:0;
 }
 
 .monitor .fface .chart-inner {
-margin:0 15px 15px 5px;
+margin:0 10px 15px 5px;
 }
-
-.monitor .fface .chart-inner .magic-chart-split-main{
-	border:1px solid #b6d9ff;
-	border-radius:5px 5px 0 0;
-}
-
-.monitor .fface .chart-inner .magic-chart-split-sub{
-	border:1px solid #b6d9ff;
-	border-top:0;
-	border-radius:0 0 5px 5px;
-}
-
 
 .monitor .bface .binner {
-margin: 26px 0 24px 20px;
+margin:26px 0 15px 20px;
 }
 
 .monitor .bface .setting-row {
@@ -635,14 +656,6 @@ width:16px;
 
 .monitor .yui3-resize-handle-tr,.monitor .yui3-resize-handle-tl,.monitor .yui3-resize-handle-bl,.monitor .yui3-resize-handle-b,.monitor .yui3-resize-handle-t,.monitor .yui3-resize-handle-l,.monitor .yui3-resize-handle-r {
 display:none;
-}
-
-.yui3-skin-sam .yui3-calendar-day, .yui3-skin-sam .yui3-calendar-prevmonth-day, .yui3-skin-sam .yui3-calendar-nextmonth-day{
-font-size:12px;padding:0;
-}
-
-.yui3-skin-sam .yui3-calendar-weekday {
-font-size: 12px;
 }
 
 .monitor .set .fface .chart,.monitor .set .fface .setting {
