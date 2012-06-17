@@ -348,6 +348,9 @@ YUI.add('monitorPannel', function (Y) {
 		getConfig : function () {
 			return widgetManager.getConfig(this.config.id);
 		},
+		spark:function(){
+			this.fface.one('.titlebar').setStyle('background-color',"#F34B60");
+		},
 		drawChart : function (dt) {
 			log('drawChart', this);
 			//return false;

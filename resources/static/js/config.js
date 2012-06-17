@@ -149,6 +149,10 @@ var YUI_CONFIG = {
 		'desktopManager':{
 			fullpath:'/resources/static/js/app/desktopManager.js',                   
 			requires:['desktop']
+		},
+		'widgetAlert':{
+			fullpath:'/resources/static/js/app/widgetAlert.js',
+			requires:[]
 		}
 	} /*,                            
 	groups:{			//设定加载一组YUI开发包之外的模块集合，

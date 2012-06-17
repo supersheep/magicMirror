@@ -775,11 +775,11 @@ YUI.add('widgetManager',function(Y){
 		
 		show : function(){
 			log('show',this);
-			this.elem.setStyle('display','none');
+			this.elem.setStyle('display','block');
 		},
 		hide:function(){
 			log('hide',this);
-			this.elem.setStyle('display','block');	
+			this.elem.setStyle('display','none');	
 		}
 	}
 	

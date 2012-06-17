@@ -5,7 +5,7 @@ var widgetManager,
 	monitorFactory,
 	desktopManager;
 
-YUI(YUI_CONFIG).use('desktopManager','monitorFactory','widgetManager','dd-drag','dd-drop','dd-proxy',function(Y) {
+YUI(YUI_CONFIG).use('desktopManager','monitorFactory','widgetManager','dd-drag','dd-drop','dd-proxy','widgetAlert',function(Y) {
 	
 	var body = Y.one('body'),
 		wrap = body.one('.wrap'),
@@ -135,6 +135,9 @@ YUI(YUI_CONFIG).use('desktopManager','monitorFactory','widgetManager','dd-drag',
 		}
 		// console.log('initdata',localStorage.getItem("desktops"),desktopData);
 		
+		var widgetAlert = new Y.WidgetAlert("ajax/url");
+		widgetAlert.startFetch();
+		window.widgetAlert = widgetAlert;
 		
 	});
 	
