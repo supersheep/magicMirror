@@ -92,7 +92,6 @@ YUI.add('widgetManager',function(Y){
 				desktop = desktopManager.getCurrentDesktop(),
 				node = this.get('node');
 				
-				console.log(o);
 			// add a monitor to a desktop
 			monitorFactory.produce(id,xy,desktop,{
 				config:o.config

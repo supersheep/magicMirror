@@ -22,13 +22,25 @@ YUI.add('monitorPannel', function (Y) {
 			alias = json.alias.split(',');
 		
 		
+		if(json.data.length != ykeys.length){
+			console.error("ykeys not match");
+			return;
+		}
 		
 		// multi view data
 		json.data.forEach(function (dt, i) {
 			var ykey = ykeys[i].split('|'),
 				d;
-			// 年月日直接按数字显示
+				
+			
+			dt = dt.filter(function(obj){
+				return obj !== null;
+			});
+			
+			
 			if(["y","m","d","h"].indexOf(xkey) >= 0){
+			
+			
 				dt = dt.map(function(obj){
 					var year = obj["y"],
 						month = obj["m"] ? (+obj["m"] + 1) : 1,
