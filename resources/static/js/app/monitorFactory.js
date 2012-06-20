@@ -10,6 +10,7 @@ YUI.add('monitorFactory',function(Y){
 				"id":w.id,
 				"setting":Y.merge({
 					"type":"line",
+					"timeBy":"r",
 					"start":"",
 					"end":""
 				},w.setting)
@@ -36,6 +37,9 @@ YUI.add('monitorFactory',function(Y){
 			if(!mod){
 				throw "module " + id + " not defined";
 			}
+			config = config || {};
+			// simple code is more important, give up to insure the order of controls
+			config.setting = Y.mix(config.setting || {},mod.setting);
 			
 			new Y.MonitorPannel(
 				axis,

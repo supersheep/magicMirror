@@ -304,7 +304,7 @@ YUI.add('widgetManager',function(Y){
 		renderEdit:function(widgetdata){
 			var self = this,
 				id = widgetdata.id,
-				cate = widgetdata.cate,
+				cate = widgetdata.cate || Tabs.defaultCate,
 				imgnode = dom('img').setAttribute('src',widgetdata.icon);
 				setting_pannel = self.setting_pannel;
 
@@ -325,9 +325,6 @@ YUI.add('widgetManager',function(Y){
 					Y.on('io:success', function(id, o){
 						var data = JSON.parse(o.responseText);
 						self.fire('update',parseData(data));
-						setTimeout(function(){
-							setting_pannel.empty();
-						},500);
 						self.hide();
 					},Y);
 					
@@ -362,9 +359,6 @@ YUI.add('widgetManager',function(Y){
 					Y.on('io:success', function(id, o){
 						var data = JSON.parse(o.responseText);
 						self.fire('create',parseData(data),true); // switchToTab true
-						setTimeout(function(){
-							setting_pannel.empty();
-						},500);
 						self.hide();
 					},Y);
 					
@@ -380,12 +374,17 @@ YUI.add('widgetManager',function(Y){
 		show:function(wraper){
 			var elem = this.elem;
 			
+			elem.setStyle('display','block');
 			elem.setStyle('height',this.manager.wrap.get('clientHeight'));
 			elem.setStyle('left',240);
 		},
 		
 		hide:function(){
-			this.elem.setStyle('left',10);
+			var elem = this.elem;
+			elem.setStyle('left',10);
+			setTimeout(function(){
+				elem.setStyle('display','none');
+			},500);
 		}
 		
 	}
@@ -503,23 +502,26 @@ YUI.add('widgetManager',function(Y){
 		
 		this.tabs = {};
 	}
-	
+	Tabs.defaultCate = '未分类';
 	Tabs.prototype = {
 		constructor:Tabs,
 		moveToTab:function(name,widget_li){
 			var cate = widget_li.data.cate;
-			var from = this.get(cate);
+			var from = this.get(cate) || this.get(Tabs.defaultCate);
 			var to = this.get(name);
 			
 			from.remove(widget_li);
+			if(!to){
+				to = this.add(name);
+			}
+
 			to.add(widget_li);
 			this.switchTo(name);
 		},
 		addToTab:function(name,widget_li){
 			var tab,
-				other_name = '未分类';
 			
-			name = name || other_name;
+			name = name || Tabs.defaultCate;
 			
 			tab = this.get(name);
 			if(!tab){
@@ -528,14 +530,11 @@ YUI.add('widgetManager',function(Y){
 			tab.add(widget_li);			
 		},
 		switchTo:function(name){
-			var tabs = this.tabs,
-				current = this.current,
-				tab = null,
-				tabname = null;
+			var current = this.current;
 			
 			if(name!=current){			
-				tabs[name].show();
-				tabs[current].hide();
+				this.get(name).show();
+				this.get(current).hide();
 				
 				this.current = name;
 			}

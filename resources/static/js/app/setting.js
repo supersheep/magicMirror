@@ -11,16 +11,16 @@ YUI.add('setting',function(Y){
 	var CLS_NAME = 'setting-name';
 	var CLS_FIELD = 'setting-field';
 	var CLS_UNIT = 'setting-unit';
-	var steps = ['year','month','day','hour','minute'];
+	var time_steps = ['y','m','d','h','r'];
 	var types = ['bar','line','pie','bubble','candle'];
 	var valueTextMap = {
-		'year':'年',
+		'y':'年',
 		'title':'标题',
 		'alias':'中文名',
-		'month':'月',
-		'day':'日',
-		'hour':'小时',
-		'minute':'分钟',
+		'm':'月',
+		'd':'日',
+		'h':'小时',
+		'r':'实时',
 		'xkey':'x轴字段',
 		'ykeys':'y轴字段',
 		'names':'视图名称',
@@ -35,6 +35,7 @@ YUI.add('setting',function(Y){
 		'line':'线图',
 		'pie':'饼图',
 		'cate':'分类',
+		'timeBy':'时间刻度'
 	};
 	
 	var valueConverter = {
@@ -110,6 +111,16 @@ YUI.add('setting',function(Y){
 		},
 		'freq':function(){
 			return Y.Node.create('<input placeholder="单位秒" />').setStyle('width',50);
+		},
+		'timeBy':function(){
+			var select = Y.Node.create('<select />');
+			time_steps.forEach(function(e){
+				var option = Y.Node.create('<option />');
+				option.set('value',e);
+				option.set('innerHTML',valueTextMap[e]);
+				option.appendTo(select);
+			});
+			return select;
 		},
 		'type':function(){
 			var select = Y.Node.create('<select />');

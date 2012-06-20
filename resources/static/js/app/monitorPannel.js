@@ -14,19 +14,32 @@
 YUI.add('monitorPannel', function (Y) {
 	function modSuccess(id, o, self) {
 		// var id = id; // Transaction ID.
-		var config = self.getConfig(),
+		var config = self.getConfig(),			
 			json = APP_CONFIG.dataParser(o.responseText),
 			data = [],
-			xkey = config.xkey,
+			xkey = self.realXKey(),
 			ykeys = config.ykeys.split(','),
 			alias = json.alias.split(',');
-
+		
+		
+		
 		// multi view data
 		json.data.forEach(function (dt, i) {
 			var ykey = ykeys[i].split('|'),
 				d;
-			// one view data
-
+			// 年月日直接按数字显示
+			if(["y","m","d","h"].indexOf(xkey) >= 0){
+				dt = dt.map(function(obj){
+					var year = obj["y"],
+						month = obj["m"] ? (+obj["m"] + 1) : 1,
+						date = obj["d"] || 1,
+						hours =  obj["h"] || 0;
+					
+					obj[xkey] = new Date(year + "-" + month + "-" + date).setHours(hours);					
+					return obj;
+				});				
+			}
+			
 			// sort them
 			dt = dt.sort(function (a, b) {
 				return a[xkey] - b[xkey];
@@ -35,9 +48,8 @@ YUI.add('monitorPannel', function (Y) {
 			// [{a,b,c},{a,b,c}]…
 			// translate object to array
 			d = dt.map(function (obj) {
-					
+					//var dealMap = {"y":"setYear","m":"setMonth","d":"setDate"};
 					var retarr = [];
-					
 					try {
 						
 						retarr.push(obj[xkey]);
@@ -199,6 +211,7 @@ YUI.add('monitorPannel', function (Y) {
 				ret.push("xField=" + config.xkey);
 				ret.push("fromDate=" + setting.start);
 				ret.push("toDate=" + setting.end);
+				ret.push("timeBy=" + setting.timeBy);
 				
 				return "?" + ret.join("&");
 			}
@@ -345,19 +358,26 @@ YUI.add('monitorPannel', function (Y) {
 			});
 			
 		},
+		realXKey : function(){
+			var config = widgetManager.getConfig(this.config.id);
+				setting = this.config.setting,
+				timeBy = setting.timeBy,
+				xkey = timeBy == 'r' ? config.xkey : timeBy;
+				
+			return xkey;
+		},
 		getConfig : function () {
 			return widgetManager.getConfig(this.config.id);
-		},
-		spark:function(){
-			this.fface.one('.titlebar').setStyle('background-color',"#F34B60");
 		},
 		drawChart : function (dt) {
 			log('drawChart', this);
 			//return false;
 			var self = this,
+			chartTypes = Y.ChartTypes,
 			type = self.config.setting.type,
-			chart = APP_CONFIG.chartTypes[type],
-			subchart = APP_CONFIG.chartTypes.bar,
+			chart = chartTypes[type],
+			subchart = chartTypes.bar,
+			realxkey = self.realXKey(),
 			config = self.getConfig(),
 			data = self.data = dt || self.data || [],
 			puredata = data.map(function (d) {
@@ -436,7 +456,7 @@ YUI.add('monitorPannel', function (Y) {
 			}
 			
 			// x轴为时间
-			if (config.xkey === APP_CONFIG.timefield && type !== "pie") {
+			if (["y","m","d","h",APP_CONFIG.timefield].indexOf(realxkey) >= 0 && type !== "pie") {
 				chart = Y.merge(chart, timeconfig);
 				subchart = Y.merge(subchart, timeconfig);
 			}

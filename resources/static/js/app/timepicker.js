@@ -29,7 +29,7 @@ YUI.add('timepicker',function(Y){
 		    var datestr;
 		    
 		    date.setHours(0);
-		    datestr = dtdate.format(date,{format:"%x %l:%M:%S"});
+		    datestr = dtdate.format(date,{format:"%Y-%m-%d %l:%M:%S"});
 		    self.fire('selection',{date:date,datestr:datestr});
 		});	
 		//console.log();
