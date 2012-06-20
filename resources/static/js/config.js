@@ -39,78 +39,39 @@ var APP_CONFIG = {
 	widgetUrl	: '/ajax/widget.txt',
 	timefield	: 'mirrorDatetime', // mirrorDatetime
 	dataParser	: function(data){
-		var json = JSON.parse(data);
-		var data = JSON.parse(json.data);
+		var json,data;
+	
+		try{
+			json = JSON.parse(data);
+		}catch(e){
+			console.error("json parse error",data);
+		}
+		
+		try{
+			data = JSON.parse(json.data);
+		}catch(e){
+			console.error("json parse error",json.data);
+		}	
 		
 		return {
 			data:data,
 			xkey:json.xField,
 			alias:json.viewAliasName,
 			names:json.viewName
-		}; // Response data.
-		//return JSON.parse(data).data;
+		}; // Response data.	
 	},
 	customDataParser:function(data){
-		//return data;
-		return JSON.parse(data).data;
-	},
-	chartTypes	: {
-		"bar":{
-			"ycount":1,
-			"yaxis":{
-				tickFormatter:FORMATTERS['kilo']
-			},
-			"bars" : {
-	    		show : true,
-	    		shadowSize : 0,
-	    		barWidth : 0.5
-			}
-		},
-		"line":{
-			"ycount":1,
-			"yaxis":{
-				tickFormatter:FORMATTERS['kilo']
-			}
-		},
-		"area":{
-		"ycount":1,
-			"lines":{
-				"lineWidth":1
-			},
-			"yaxis":{
-				tickFormatter:FORMATTERS['kilo']
-			}
-		},
-		"candle":{
-			"ycount":4,
-		    "candles" : { show : true, candleWidth : 0.6 },
-		    "xaxis"   : { noTicks : 10 }
-		},
-		"bubble":{
-			"ycount":2,
-			"bubbles" : { 
-				show : true, 
-				baseRadius : 5 
-			}
-		},
-		"pie":{
-			"pie" : {
-		    	show : true, 
-		    	explode : 6
-		    },
-			"xaxis" : { showLabels : false },
-			"yaxis" : { showLabels : false },
-		    "grid" : {
-    			verticalLines : false,
-      			horizontalLines : false
-    		},
-    		"legend" : {
-			    position : 'se',
-		    	backgroundColor : '#D2E8FF'
-		    }
+		var ret;
+		try{
+			ret = JSON.parse(data).data;
+		}catch(e){
+			console.log("自定义widget",data);
+			ret = [];
 		}
+		return ret;
 	}
 };
+
 
 
 var YUI_CONFIG = {
@@ -126,9 +87,12 @@ var YUI_CONFIG = {
 			fullpath:'/resources/static/js/app/setting.js',
 			requires:['node','event-custom','timepicker']
 		},
+		'chartTypes':{
+			fullpath:'/resources/static/js/app/chartTypes.js'
+		},
 		'monitorPannel':{		
 			fullpath:'/resources/static/js/app/monitorPannel.js',
-			requires:['node','dd-drag','dd-constrain','resize','event-custom','io','setting']
+			requires:['node','dd-drag','dd-constrain','resize','event-custom','io','setting','chartTypes']
 		},
 		'monitorFactory':{
 			fullpath:'/resources/static/js/app/monitorFactory.js',
@@ -154,13 +118,5 @@ var YUI_CONFIG = {
 			fullpath:'/resources/static/js/app/widgetAlert.js',
 			requires:[]
 		}
-	} /*,                            
-	groups:{			//设定加载一组YUI开发包之外的模块集合，
-		'groupName':{
-			base:'',
-			modules:{
-				'module1':{path:'',requires:[],skinnable:true}//注：设定skinnable=true可以依据YUI定义的模块组织目录结构自动加载该模块依赖的css文件
-			}
-		}
-	}*/
+	}
 };
